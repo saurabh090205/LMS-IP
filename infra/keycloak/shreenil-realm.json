@@ -1,0 +1,88 @@
+{
+  "realm": "shreenil",
+  "displayName": "Shreenil Virtual University",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "ROLE_STUDENT",
+        "description": "Student primary access role"
+      },
+      {
+        "name": "ROLE_TEACHER",
+        "description": "Faculty & Professor access role"
+      },
+      {
+        "name": "ROLE_PARENT",
+        "description": "Parent & Guardian access role"
+      },
+      {
+        "name": "ROLE_ADMIN",
+        "description": "University Administrator access role"
+      },
+      {
+        "name": "ROLE_SUPER_ADMIN",
+        "description": "Super Administrator access role"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "shreenil-frontend",
+      "name": "Shreenil React Frontend",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "redirectUris": [
+        "http://localhost:5173/*",
+        "http://localhost:5174/*",
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000",
+        "+"
+      ]
+    },
+    {
+      "clientId": "shreenil-backend",
+      "name": "Shreenil Spring Boot Backend",
+      "enabled": true,
+      "bearerOnly": true
+    }
+  ],
+  "users": [
+    {
+      "username": "aarav.sharma@shreenil.com",
+      "email": "aarav.sharma@shreenil.com",
+      "firstName": "Aarav",
+      "lastName": "Sharma",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Student@123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ROLE_STUDENT"
+      ],
+      "attributes": {
+        "tenant_id": ["tenant-default"],
+        "enrollment_number": ["VIT-2024-AI-0142"],
+        "program_code": ["BTECH-CSE-AI"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+**/dist/
+target/
+**/target/
+*.tsbuildinfo
+*.class
+*.jar
+*.war
+
+# Environment files
+.env
+.env.*
+!.env.example
+.env.local
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.claude/
+
+# Logs & temp
+*.log
+logs/
+.system_generated/
+
+# OS files
+.DS_Store
+Thumbs.db

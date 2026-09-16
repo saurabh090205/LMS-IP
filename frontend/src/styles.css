@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: #1F2937;
+    background-color: #F6F6FB;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: #F6F6FB;
+    color: #1F2937;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #111827;
+    letter-spacing: -0.015em;
+  }
+}
+
+/* Crisp academic surface elevation */
+.shreenil-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E7E7F0;
+  border-radius: 0.875rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shreenil-card:hover {
+  border-color: #D8D8E5;
+  box-shadow: 0 4px 16px 0 rgba(31, 41, 55, 0.04);
+}
+
+/* Refined academic reading container */
+.reading-content {
+  font-family: 'Lora', 'Merriweather', Georgia, serif;
+  line-height: 1.75;
+  color: #2D3748;
+}
+
+.reading-content h1,
+.reading-content h2,
+.reading-content h3 {
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  color: #111827;
+}
+
+/* Custom scrollbars for clean academic UI */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D8D8E5;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A0A0B8;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

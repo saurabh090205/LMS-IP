@@ -1,0 +1,136 @@
+import { CurriculumCourse } from '../../types';
+
+export const generativeAICourse: CurriculumCourse = {
+  id: 'course-generative-ai',
+  canonicalCode: 'CI4001',
+  courseStructureCode: 'CI4001',
+  syllabusTemplateCode: 'CI 4001',
+  title: 'Generative AI',
+  altTitle: 'CI 4001: Generative AI',
+  credits: 2,
+  teachingScheme: {
+    theoryHoursPerWeek: 2,
+    labHoursPerWeek: 0,
+    tutorialHoursPerWeek: 0,
+  },
+  category: 'OE: Open Elective',
+  nepClassification: 'OE2',
+  prerequisites: ['Python', 'Basic ML', 'Linear Algebra', 'Neural Networks'],
+  objectives: [
+    'To introduce the foundational concepts and evolution of Generative AI models such as GANs, VAEs, and Diffusion models.',
+    'To explain the basics of text processing and natural language understanding using real-world examples.',
+    'To provide a conceptual understanding of sequence modeling using RNNs, LSTMs, and GRUs.',
+    'To describe advanced NLP techniques including Attention Mechanism, Transformers, and BERT.',
+    'To familiarize students with the architecture and functioning of Large Language Models (LLMs) such as GPT and BERT.',
+    'To analyze practical applications and ethical concerns associated with Generative AI.',
+    'To promote awareness of responsible AI practices through case-based learning and discussions.',
+  ],
+  relevance:
+    'Generative AI models and LLMs represent the state of the art in machine intelligence, enabling machines to understand, reason, generate natural language, synthesize code, and construct multimodal artifacts.',
+  units: [
+    {
+      id: 'genai-unit-1',
+      courseId: 'course-generative-ai',
+      unitNumber: 'Unit-I',
+      title: 'Processing Text with Python Essential Training',
+      teachingHours: 4,
+      orderIndex: 1,
+      topics: [
+        { id: 'genai-top-1-1', unitId: 'genai-unit-1', title: 'Introduction to Text and NLP, Text Cleaning and Tokenization, Stemming and Lemmatization', orderIndex: 1 },
+        { id: 'genai-top-1-2', unitId: 'genai-unit-1', title: 'Stop Words and POS Tagging, Named Entity Recognition (NER), Text Vectorization (BoW, TF-IDF, Embeddings)', orderIndex: 2 },
+        { id: 'genai-top-1-3', unitId: 'genai-unit-1', title: 'Sentiment Analysis, Text Classification Basics, Introduction to Text Generation, NLP Libraries: NLTK, spaCy, Hugging Face', orderIndex: 3 },
+      ],
+    },
+    {
+      id: 'genai-unit-2',
+      courseId: 'course-generative-ai',
+      unitNumber: 'Unit-II',
+      title: 'Hands-On Natural Language Processing',
+      teachingHours: 5,
+      orderIndex: 2,
+      topics: [
+        { id: 'genai-top-2-1', unitId: 'genai-unit-2', title: 'Text Data Loading and Preprocessing, Tokenization and POS Tagging with spaCy, Named Entity Recognition (NER)', orderIndex: 1 },
+        { id: 'genai-top-2-2', unitId: 'genai-unit-2', title: 'Text Classification using Scikit-learn, Word Embeddings (Word2Vec, GloVe), Introduction to Transformers and BERT', orderIndex: 2 },
+      ],
+    },
+    {
+      id: 'genai-unit-3',
+      courseId: 'course-generative-ai',
+      unitNumber: 'Unit-III',
+      title: 'Advanced NLP with Python for Machine Learning',
+      teachingHours: 5,
+      orderIndex: 3,
+      topics: [
+        { id: 'genai-top-3-1', unitId: 'genai-unit-3', title: 'Text Feature Engineering, N-grams and Language Models, Topic Modeling with LDA', orderIndex: 1 },
+        { id: 'genai-top-3-2', unitId: 'genai-unit-3', title: 'Sequence Models with RNN and LSTM, Attention Mechanism Basics, Introduction to Transfer Learning in NLP', orderIndex: 2 },
+      ],
+    },
+    {
+      id: 'genai-unit-4',
+      courseId: 'course-generative-ai',
+      unitNumber: 'Unit-IV',
+      title: 'Deep Learning Foundations: Natural Language Processing with Tensor Flow',
+      teachingHours: 4,
+      orderIndex: 4,
+      topics: [
+        { id: 'genai-top-4-1', unitId: 'genai-unit-4', title: 'Introduction to TensorFlow for NLP, Text Vectorization with TensorFlow, Building Neural Networks for Text Classification', orderIndex: 1 },
+        { id: 'genai-top-4-2', unitId: 'genai-unit-4', title: 'Word Embeddings with Embedding Layer, Implementing RNNs and LSTMs in TensorFlow, Introduction to Transformer Models using TensorFlow', orderIndex: 2 },
+      ],
+    },
+    {
+      id: 'genai-unit-5',
+      courseId: 'course-generative-ai',
+      unitNumber: 'Unit-V',
+      title: 'Recurrent Neural Networks',
+      teachingHours: 5,
+      orderIndex: 5,
+      topics: [
+        { id: 'genai-top-5-1', unitId: 'genai-unit-5', title: 'Introduction to Sequential Data and RNNs, RNN Architecture and Working, Vanishing Gradient Problem', orderIndex: 1 },
+        { id: 'genai-top-5-2', unitId: 'genai-unit-5', title: 'Long Short-Term Memory (LSTM) Networks, Gated Recurrent Unit (GRU), Text Generation with RNNs', orderIndex: 2 },
+      ],
+    },
+    {
+      id: 'genai-unit-6',
+      courseId: 'course-generative-ai',
+      unitNumber: 'Unit VI',
+      title: 'Generative AI: Working with Large Language Models',
+      teachingHours: 5,
+      orderIndex: 6,
+      topics: [
+        { id: 'genai-top-6-1', unitId: 'genai-unit-6', title: 'Overview of Large Language Models (LLMs), Pretraining and Fine-Tuning of LLMs, Prompt Engineering Techniques', orderIndex: 1 },
+        { id: 'genai-top-6-2', unitId: 'genai-unit-6', title: 'In-Context and Few-Shot Learning, Introduction to Retrieval-Augmented Generation (RAG), Applications of LLMs in Text Generation and Chatbots', orderIndex: 2 },
+      ],
+    },
+  ],
+  assessmentScheme: {
+    heads: [
+      { head: 'HA', name: 'Home Assignment', maxMarks: 10, convertedMarks: 10, weightagePercent: 10 },
+      { head: 'MSE', name: 'Mid Semester Examination', maxMarks: 30, convertedMarks: 30, weightagePercent: 30 },
+      { head: 'ESE', name: 'End Semester Examination', maxMarks: 30, convertedMarks: 30, weightagePercent: 30 },
+      { head: 'Viva', name: 'Comprehensive Viva Voce', maxMarks: 30, convertedMarks: 30, weightagePercent: 30 },
+    ],
+    totalMarks: 100,
+  },
+  textbooks: [
+    { id: 'gai-tb-1', authors: 'D. Foster', title: 'Generative Deep Learning: Teaching Machines to Paint, Write, Compose, and Play', edition: '1st ed.', publisher: "O'Reilly Media", year: 2019, format: 'PRINT' },
+    { id: 'gai-tb-2', authors: 'J. Shane', title: "You Look Like a Thing and I Love You: How AI Works and Why It's Making the World a Weirder Place", edition: '1st ed.', publisher: 'Voracious', year: 2019, format: 'PRINT' },
+    { id: 'gai-tb-3', authors: 'T. Mitchell', title: 'Machine Learning', edition: '1st ed.', publisher: 'McGraw Hill', year: 1997, format: 'PRINT' },
+    { id: 'gai-tb-4', authors: 'S. Russell and P. Norvig', title: 'Artificial Intelligence: A Modern Approach', edition: '4th ed.', publisher: 'Pearson', year: 2020, format: 'PRINT' },
+  ],
+  referenceBooks: [
+    { id: 'gai-rb-1', authors: 'F. Chollet', title: 'Deep Learning with Python', edition: '2nd ed.', publisher: 'Manning Publications', year: 2021, format: 'PRINT' },
+    { id: 'gai-rb-2', authors: 'I. Goodfellow, Y. Bengio, and A. Courville', title: 'Deep Learning', publisher: 'MIT Press', year: 2016, format: 'PRINT', url: 'https://www.deeplearningbook.org' },
+  ],
+  moocs: [
+    { id: 'gai-mooc-1', title: 'Introduction to Generative Adversarial Networks (DeepLearning.AI)', platform: 'Coursera', url: 'https://www.coursera.org/learn/build-basic-generative-adversarial-networks-gans' },
+    { id: 'gai-mooc-2', title: 'CS231n: Convolutional Neural Networks for Visual Recognition', platform: 'Stanford University', url: 'http://cs231n.stanford.edu' },
+    { id: 'gai-mooc-3', title: 'The Illustrated Transformer', platform: 'Distill.pub', url: 'https://distill.pub/2016/deconv-checkerboard/' },
+    { id: 'gai-mooc-4', title: 'ChatGPT Prompt Engineering for Developers', platform: 'OpenAI', url: 'https://platform.openai.com/education' },
+  ],
+  courseOutcomes: [
+    { code: 'CO1', description: 'Explain the foundational concepts and evolution of Generative AI models' },
+    { code: 'CO2', description: 'Apply natural language processing techniques for text classification and sentiment analysis' },
+    { code: 'CO3', description: 'Design sequence models using RNNs, LSTMs, and GRUs' },
+    { code: 'CO4', description: 'Implement transformer models and prompt engineering strategies for LLMs' },
+  ],
+};

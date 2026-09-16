@@ -1,0 +1,278 @@
+import { CourseStudentRosterItem, StudentCourseGradeRecord, Submission } from '../../types/lms';
+
+export const mockPendingSubmissions: (Submission & { courseCode: string; courseTitle: string; assignmentTitle: string })[] = [
+  {
+    id: 'sub-dl-prac-2-a',
+    assignmentId: 'asg-dl-prac-2',
+    assignmentTitle: 'Practical 2: Multilayer Perceptron (MLP) Classification on Iris/Wine Dataset',
+    courseCode: 'CI3001',
+    courseTitle: 'Deep Learning',
+    studentId: 'usr_std_102',
+    studentName: 'Rohan Verma',
+    studentEmail: 'rohan.v@shreenil.edu',
+    submittedAt: 'Today, 2:15 PM',
+    status: 'PENDING',
+    maxMarks: 100,
+    textResponse: 'Here is my complete 3-layer MLP script with confusion matrix and training curves on Wine dataset.',
+    attachments: ['rohan_mlp_wine.ipynb', 'confusion_matrix.png'],
+  },
+  {
+    id: 'sub-dl-prac-2-b',
+    assignmentId: 'asg-dl-prac-2',
+    assignmentTitle: 'Practical 2: Multilayer Perceptron (MLP) Classification on Iris/Wine Dataset',
+    courseCode: 'CI3001',
+    courseTitle: 'Deep Learning',
+    studentId: 'usr_std_103',
+    studentName: 'Priya Patel',
+    studentEmail: 'priya.p@shreenil.edu',
+    submittedAt: 'Today, 11:30 AM',
+    status: 'PENDING',
+    maxMarks: 100,
+    textResponse: 'Trained model with Adam optimizer, batch normalization, and evaluated with accuracy and confusion matrix.',
+    attachments: ['priya_mlp_iris.py', 'evaluation_metrics.pdf'],
+  },
+  {
+    id: 'sub-os-prac-1-a',
+    assignmentId: 'asg-os-prac-1',
+    assignmentTitle: 'Practical 1: Shell & Awk Programming for Student Database',
+    courseCode: 'CI3202',
+    courseTitle: 'Operating System',
+    studentId: 'usr_std_104',
+    studentName: 'Marcus Aurelius Sterling',
+    studentEmail: 'marcus.s@shreenil.edu',
+    submittedAt: 'Yesterday, 8:10 PM',
+    status: 'PENDING',
+    maxMarks: 50,
+    textResponse: 'Menu-driven bash script implementing student DB operations with awk parsing.',
+    attachments: ['student_db.sh', 'awk_helpers.awk'],
+  },
+  {
+    id: 'sub-erai-prac-6-a',
+    assignmentId: 'asg-erai-prac-6',
+    assignmentTitle: 'Practical 6: Demographic Parity Difference Analysis on UCI Adult',
+    courseCode: 'CI3203A',
+    courseTitle: 'Ethical and Responsible AI',
+    studentId: 'usr_std_105',
+    studentName: 'Zoya Khan',
+    studentEmail: 'zoya.k@shreenil.edu',
+    submittedAt: 'Yesterday, 4:45 PM',
+    status: 'PENDING',
+    maxMarks: 50,
+    textResponse: 'Computed Demographic Parity Difference and plotted grouped bar chart showing gender distribution bias.',
+    attachments: ['demographic_parity_adult.ipynb', 'fairness_audit.pdf'],
+  },
+];
+
+export const mockCourseRoster: Record<string, CourseStudentRosterItem[]> = {
+  ci3001: [
+    {
+      id: 'rost-1',
+      courseId: 'ci3001',
+      studentId: 'usr_std_101',
+      studentName: 'Aarav Sharma',
+      studentEmail: 'aarav.sharma@shreenil.edu',
+      enrollmentDate: 'Aug 01, 2026',
+      progressPercent: 68,
+      lastActive: '2 hours ago',
+      currentGrade: 'A+ (96.5%)',
+      status: 'ACTIVE',
+    },
+    {
+      id: 'rost-2',
+      courseId: 'ci3001',
+      studentId: 'usr_std_102',
+      studentName: 'Rohan Verma',
+      studentEmail: 'rohan.v@shreenil.edu',
+      enrollmentDate: 'Aug 02, 2026',
+      progressPercent: 60,
+      lastActive: '15 mins ago',
+      currentGrade: 'A (92.0%)',
+      status: 'ACTIVE',
+    },
+    {
+      id: 'rost-3',
+      courseId: 'ci3001',
+      studentId: 'usr_std_103',
+      studentName: 'Priya Patel',
+      studentEmail: 'priya.p@shreenil.edu',
+      enrollmentDate: 'Aug 01, 2026',
+      progressPercent: 72,
+      lastActive: '1 hour ago',
+      currentGrade: 'A+ (98.0%)',
+      status: 'ACTIVE',
+    },
+    {
+      id: 'rost-4',
+      courseId: 'ci3001',
+      studentId: 'usr_std_104',
+      studentName: 'Marcus Aurelius Sterling',
+      studentEmail: 'marcus.s@shreenil.edu',
+      enrollmentDate: 'Aug 05, 2026',
+      progressPercent: 55,
+      lastActive: '1 day ago',
+      currentGrade: 'B+ (88.5%)',
+      status: 'ACTIVE',
+    },
+    {
+      id: 'rost-5',
+      courseId: 'ci3001',
+      studentId: 'usr_std_105',
+      studentName: 'Zoya Khan',
+      studentEmail: 'zoya.k@shreenil.edu',
+      enrollmentDate: 'Aug 03, 2026',
+      progressPercent: 80,
+      lastActive: '3 hours ago',
+      currentGrade: 'A+ (99.2%)',
+      status: 'ACTIVE',
+    },
+  ],
+};
+
+export const mockGradebookMatrix: Record<string, {
+  students: {
+    id: string;
+    name: string;
+    email: string;
+    avatar?: string;
+    grades: Record<string, number | null>; // assessmentId -> score
+    totalPercentage: number;
+    letterGrade: string;
+  }[];
+  assessments: { id: string; title: string; type: 'assignment' | 'quiz' | 'midterm' | 'final'; maxMarks: number; weightage: number }[];
+}> = {
+  ci3001: {
+    assessments: [
+      { id: 'asg-dl-prac-1', title: 'Practical 1: Preprocessing & Colab', type: 'assignment', maxMarks: 100, weightage: 10 },
+      { id: 'quiz-101', title: 'Quiz 1: Unit I & II Fundamentals', type: 'quiz', maxMarks: 25, weightage: 10 },
+      { id: 'asg-dl-prac-2', title: 'Practical 2: MLP Classification', type: 'assignment', maxMarks: 100, weightage: 10 },
+      { id: 'quiz-201', title: 'Quiz 2: Unit IV CNNs', type: 'quiz', maxMarks: 20, weightage: 10 },
+    ],
+    students: [
+      {
+        id: 'usr_std_101',
+        name: 'Aarav Sharma',
+        email: 'aarav.sharma@shreenil.edu',
+        grades: { 'asg-dl-prac-1': 96, 'quiz-101': 23, 'asg-dl-prac-2': null, 'quiz-201': 19 },
+        totalPercentage: 96.5,
+        letterGrade: 'A+',
+      },
+      {
+        id: 'usr_std_102',
+        name: 'Rohan Verma',
+        email: 'rohan.v@shreenil.edu',
+        grades: { 'asg-dl-prac-1': 90, 'quiz-101': 22, 'asg-dl-prac-2': null, 'quiz-201': 18 },
+        totalPercentage: 91.0,
+        letterGrade: 'A',
+      },
+      {
+        id: 'usr_std_103',
+        name: 'Priya Patel',
+        email: 'priya.p@shreenil.edu',
+        grades: { 'asg-dl-prac-1': 100, 'quiz-101': 25, 'asg-dl-prac-2': null, 'quiz-201': 20 },
+        totalPercentage: 98.8,
+        letterGrade: 'A+',
+      },
+      {
+        id: 'usr_std_104',
+        name: 'Marcus Aurelius Sterling',
+        email: 'marcus.s@shreenil.edu',
+        grades: { 'asg-dl-prac-1': 85, 'quiz-101': 20, 'asg-dl-prac-2': null, 'quiz-201': 17 },
+        totalPercentage: 86.4,
+        letterGrade: 'B+',
+      },
+      {
+        id: 'usr_std_105',
+        name: 'Zoya Khan',
+        email: 'zoya.k@shreenil.edu',
+        grades: { 'asg-dl-prac-1': 99, 'quiz-101': 24, 'asg-dl-prac-2': null, 'quiz-201': 20 },
+        totalPercentage: 97.9,
+        letterGrade: 'A+',
+      },
+    ],
+  },
+};
+
+export const mockStudentGradeRecords: StudentCourseGradeRecord[] = [
+  {
+    courseId: 'ci3001',
+    courseCode: 'CI3001',
+    courseTitle: 'Deep Learning',
+    instructorName: 'Dr. Elena Rostova',
+    term: 'AY 2026-27 • Module V',
+    currentPercentage: 96.5,
+    letterGrade: 'A+',
+    credits: 4,
+    assessments: [
+      { id: 'asg-dl-prac-1', title: 'Practical 1: TensorFlow/Keras Setup, Data Preprocessing', type: 'assignment', score: 96, maxScore: 100, weightagePercent: 10, submittedAt: 'Sep 04, 2026', feedback: 'Excellent data pipeline and visualization plots.' },
+      { id: 'quiz-101', title: 'Quiz 1: Unit I & II Fundamentals & Perceptron Diagnostics', type: 'quiz', score: 23, maxScore: 25, weightagePercent: 10, submittedAt: 'Sep 03, 2026', feedback: 'Clear mastery of activation functions and XOR theorem.' },
+      { id: 'asg-dl-prac-2', title: 'Practical 2: Multilayer Perceptron on Iris/Wine Dataset', type: 'assignment', score: 0, maxScore: 100, weightagePercent: 10, submittedAt: 'Pending Evaluation' },
+      { id: 'quiz-201', title: 'Quiz 2: Unit IV CNN Architectures & Hyperparameters', type: 'quiz', score: 19, maxScore: 20, weightagePercent: 10, submittedAt: 'Sep 10, 2026', feedback: 'Accurate filter stride & receptive field calculations.' },
+    ],
+  },
+  {
+    courseId: 'ci3202',
+    courseCode: 'CI3202',
+    courseTitle: 'Operating System',
+    instructorName: 'Prof. Marcus Vance',
+    term: 'AY 2026-27 • Module V',
+    currentPercentage: 92.4,
+    letterGrade: 'A',
+    credits: 3,
+    assessments: [
+      { id: 'asg-os-prac-1', title: 'Practical 1: Shell & Awk Database Management', type: 'assignment', score: 47, maxScore: 50, weightagePercent: 10, submittedAt: 'Sep 02, 2026', feedback: 'Clean script logic and input sanitization.' },
+      { id: 'quiz-os-1', title: 'Mid Semester Assessment (MSA): CPU Scheduling & PCB', type: 'midterm', score: 28, maxScore: 30, weightagePercent: 15, submittedAt: 'Sep 07, 2026' },
+    ],
+  },
+  {
+    courseId: 'ci3003d',
+    courseCode: 'CI3003D',
+    courseTitle: 'MLOPS',
+    instructorName: 'Dr. Sarah Lin',
+    term: 'AY 2026-27 • Module V',
+    currentPercentage: 89.5,
+    letterGrade: 'A-',
+    credits: 4,
+    assessments: [
+      { id: 'asg-mlops-1', title: 'Home Assignment 1: DVC Versioning & MLflow Tracking', type: 'assignment', score: 19, maxScore: 20, weightagePercent: 10, submittedAt: 'Sep 06, 2026' },
+    ],
+  },
+  {
+    courseId: 'ci3203a',
+    courseCode: 'CI3203A',
+    courseTitle: 'Ethical and Responsible AI',
+    instructorName: 'Dr. Aris Thorne',
+    term: 'AY 2026-27 • Module V',
+    currentPercentage: 94.0,
+    letterGrade: 'A',
+    credits: 4,
+    assessments: [
+      { id: 'asg-erai-1', title: 'Practical 3: COMPAS Recidivism Tool Accountability Critique', type: 'assignment', score: 48, maxScore: 50, weightagePercent: 15, submittedAt: 'Sep 05, 2026' },
+    ],
+  },
+  {
+    courseId: 'ci3203b',
+    courseCode: 'CI3203B',
+    courseTitle: 'Distributed and Federated Learning',
+    instructorName: 'Prof. Kenji Takahashi',
+    term: 'AY 2026-27 • Module V',
+    currentPercentage: 91.0,
+    letterGrade: 'A',
+    credits: 4,
+    assessments: [
+      { id: 'asg-dfl-1', title: 'Practical 1: Python Simulation of Federated Averaging (FedAvg)', type: 'assignment', score: 45, maxScore: 50, weightagePercent: 15, submittedAt: 'Sep 08, 2026' },
+    ],
+  },
+  {
+    courseId: 'ci3203c',
+    courseCode: 'CI3203C',
+    courseTitle: 'Information Security',
+    instructorName: 'Prof. Marcus Vance',
+    term: 'AY 2026-27 • Module V',
+    currentPercentage: 88.0,
+    letterGrade: 'B+',
+    credits: 4,
+    assessments: [
+      { id: 'asg-is-1', title: 'Practical 2: Classical & Modern AES Encryption Pipelines', type: 'assignment', score: 44, maxScore: 50, weightagePercent: 15, submittedAt: 'Sep 04, 2026' },
+    ],
+  },
+];
