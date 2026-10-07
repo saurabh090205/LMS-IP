@@ -1,10 +1,46 @@
 import { Course, CourseStatus } from '../types/lms';
 import { mockCourses } from '../features/courses/mockData';
+import { teacherApi } from './api/teacherApi';
+import { academicApi } from './api/academicApi';
 
 class CourseService {
   private courses: Course[] = [...mockCourses];
 
   async getCourses(filters?: { status?: CourseStatus; category?: string; search?: string; instructorId?: string }): Promise<Course[]> {
+    try {
+      const backendCourses = await academicApi.getCourses();
+      if (backendCourses && backendCourses.length > 0) {
+        // Merge or map backend courses
+        const mapped: Course[] = backendCourses.map((bc) => ({
+          id: bc.id,
+          code: bc.courseCode,
+          title: bc.title,
+          shortDescription: bc.title,
+          description: `${bc.department} • Module: ${bc.moduleCode || 'V'} • Credits: ${bc.credits}`,
+          category: bc.department || 'COMPUTER_SCIENCE',
+          difficulty: 'INTERMEDIATE',
+          instructorId: 'usr-faculty-elena',
+          instructorName: 'Dr. Elena Rostova',
+          thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80',
+          status: 'PUBLISHED' as CourseStatus,
+          visibility: 'PUBLIC',
+          startDate: '2026-07-15',
+          endDate: '2026-12-15',
+          enrolledStudentsCount: 64,
+          durationHours: (bc.theoryHours || 3) * 14,
+          modulesCount: bc.totalUnits || 5,
+          lastUpdated: '2026-10-06',
+          progress: bc.studentProgressPercent || 0,
+        }));
+        // Merge with any local drafts
+        const existingIds = new Set(mapped.map((m) => m.id));
+        const extra = this.courses.filter((c) => !existingIds.has(c.id));
+        this.courses = [...mapped, ...extra];
+      }
+    } catch (e) {
+      console.warn('Failed to fetch courses from backend, falling back to local memory', e);
+    }
+
     let result = [...this.courses];
 
     if (filters?.status) {

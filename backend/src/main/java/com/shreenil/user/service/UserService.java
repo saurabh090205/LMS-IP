@@ -172,4 +172,104 @@ public class UserService {
                         .build()
         );
     }
+
+    public List<NavigationItemResponse> getTeacherNavigation() {
+        return List.of(
+                NavigationItemResponse.builder()
+                        .id("tch-dash")
+                        .label("Faculty Hub")
+                        .path("/teacher/dashboard")
+                        .icon("LayoutDashboard")
+                        .section("main")
+                        .isComingSoon(false)
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("tch-courses")
+                        .label("My Courses")
+                        .path("/teacher/courses")
+                        .icon("BookOpen")
+                        .section("academic")
+                        .isComingSoon(false)
+                        .badge("4")
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("tch-classes")
+                        .label("Classes & Live Auditorium")
+                        .path("/teacher/classes")
+                        .icon("Video")
+                        .section("academic")
+                        .isComingSoon(false)
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("tch-assign")
+                        .label("Assignments")
+                        .path("/teacher/assignments")
+                        .icon("CheckSquare")
+                        .section("academic")
+                        .isComingSoon(false)
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("tch-grading")
+                        .label("SpeedGrader")
+                        .path("/teacher/grading")
+                        .icon("Award")
+                        .section("academic")
+                        .isComingSoon(false)
+                        .badge("Pending")
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("tch-gradebook")
+                        .label("Gradebook Matrix")
+                        .path("/teacher/gradebook")
+                        .icon("FileText")
+                        .section("academic")
+                        .isComingSoon(false)
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("tch-att")
+                        .label("Attendance Register")
+                        .path("/teacher/attendance")
+                        .icon("Clock")
+                        .section("academic")
+                        .isComingSoon(false)
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("tch-cal")
+                        .label("Teaching Timetable")
+                        .path("/teacher/calendar")
+                        .icon("Calendar")
+                        .section("academic")
+                        .isComingSoon(false)
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("profile")
+                        .label("Faculty Profile")
+                        .path("/profile")
+                        .icon("User")
+                        .section("bottom")
+                        .isComingSoon(false)
+                        .build(),
+                NavigationItemResponse.builder()
+                        .id("settings")
+                        .label("Settings")
+                        .path("/settings")
+                        .icon("Settings")
+                        .section("bottom")
+                        .isComingSoon(false)
+                        .build()
+        );
+    }
+
+    public List<NavigationItemResponse> getCurrentUserNavigation() {
+        try {
+            User user = getCurrentUserEntity();
+            boolean isTeacher = user.getRoles().stream()
+                    .anyMatch(r -> "ROLE_TEACHER".equalsIgnoreCase(r.getRoleName()) || "TEACHER".equalsIgnoreCase(r.getRoleName()));
+            if (isTeacher) {
+                return getTeacherNavigation();
+            }
+        } catch (Exception ignored) {
+        }
+        return getStudentNavigation();
+    }
 }

@@ -43,7 +43,7 @@ public class UserController {
     @GetMapping("/me/navigation")
     @Operation(summary = "Get dynamic role-aware navigation configuration for current user")
     public ResponseEntity<ApiResponse<List<NavigationItemResponse>>> getNavigation() {
-        List<NavigationItemResponse> navigation = userService.getStudentNavigation();
+        List<NavigationItemResponse> navigation = userService.getCurrentUserNavigation();
         return ResponseEntity.ok(
                 ApiResponse.<List<NavigationItemResponse>>builder()
                         .success(true)

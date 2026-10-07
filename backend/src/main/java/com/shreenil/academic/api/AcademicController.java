@@ -1,10 +1,6 @@
 package com.shreenil.academic.api;
 
-import com.shreenil.academic.dto.CourseDetailResponse;
-import com.shreenil.academic.dto.CourseSummaryResponse;
-import com.shreenil.academic.dto.ProgramResponse;
-import com.shreenil.academic.dto.TopicResponse;
-import com.shreenil.academic.dto.UnitResponse;
+import com.shreenil.academic.dto.*;
 import com.shreenil.academic.service.AcademicService;
 import com.shreenil.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -93,6 +89,83 @@ public class AcademicController {
                         .success(true)
                         .message("Unit topics retrieved successfully")
                         .data(topics)
+                        .timestamp(OffsetDateTime.now())
+                        .build()
+        );
+    }
+
+    @PostMapping("/courses")
+    @Operation(summary = "Create a new course (Faculty)")
+    public ResponseEntity<ApiResponse<CourseDetailResponse>> createCourse(
+            @RequestBody CourseCreateRequest request) {
+        CourseDetailResponse course = academicService.createCourse(request);
+        return ResponseEntity.ok(
+                ApiResponse.<CourseDetailResponse>builder()
+                        .success(true)
+                        .message("Course created successfully")
+                        .data(course)
+                        .timestamp(OffsetDateTime.now())
+                        .build()
+        );
+    }
+
+    @PutMapping("/courses/{id}")
+    @Operation(summary = "Update an existing course (Faculty)")
+    public ResponseEntity<ApiResponse<CourseDetailResponse>> updateCourse(
+            @PathVariable String id,
+            @RequestBody CourseCreateRequest request) {
+        CourseDetailResponse course = academicService.updateCourse(id, request);
+        return ResponseEntity.ok(
+                ApiResponse.<CourseDetailResponse>builder()
+                        .success(true)
+                        .message("Course updated successfully")
+                        .data(course)
+                        .timestamp(OffsetDateTime.now())
+                        .build()
+        );
+    }
+
+    @PostMapping("/courses/{id}/units")
+    @Operation(summary = "Add a unit to a course (Faculty)")
+    public ResponseEntity<ApiResponse<UnitResponse>> createUnit(
+            @PathVariable String id,
+            @RequestBody UnitCreateRequest request) {
+        UnitResponse unit = academicService.createUnit(id, request);
+        return ResponseEntity.ok(
+                ApiResponse.<UnitResponse>builder()
+                        .success(true)
+                        .message("Unit created successfully")
+                        .data(unit)
+                        .timestamp(OffsetDateTime.now())
+                        .build()
+        );
+    }
+
+    @PostMapping("/units/{id}/topics")
+    @Operation(summary = "Add a topic to a unit (Faculty)")
+    public ResponseEntity<ApiResponse<TopicResponse>> createTopic(
+            @PathVariable String id,
+            @RequestBody TopicCreateRequest request) {
+        TopicResponse topic = academicService.createTopic(id, request);
+        return ResponseEntity.ok(
+                ApiResponse.<TopicResponse>builder()
+                        .success(true)
+                        .message("Topic created successfully")
+                        .data(topic)
+                        .timestamp(OffsetDateTime.now())
+                        .build()
+        );
+    }
+
+    @GetMapping("/courses/{id}/roster")
+    @Operation(summary = "Get enrolled student roster for a course (Faculty)")
+    public ResponseEntity<ApiResponse<List<RosterStudentResponse>>> getCourseRoster(@PathVariable String id) {
+        List<RosterStudentResponse> roster = academicService.getCourseRoster(id);
+        return ResponseEntity.ok(
+                ApiResponse.<List<RosterStudentResponse>>builder()
+                        .success(true)
+                        .message("Course roster retrieved successfully")
+                        .data(roster)
                         .timestamp(OffsetDateTime.now())
                         .build()
         );

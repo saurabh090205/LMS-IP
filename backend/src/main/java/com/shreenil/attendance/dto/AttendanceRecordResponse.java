@@ -7,6 +7,9 @@ public class AttendanceRecordResponse {
     private String courseId;
     private String courseCode;
     private String courseTitle;
+    private String studentProfileId;
+    private String studentName;
+    private String enrollmentNumber;
     private LocalDate date;
     private String status; // PRESENT, ABSENT, LATE, EXCUSED
     private String remarks;
@@ -79,6 +82,15 @@ public class AttendanceRecordResponse {
         this.remarks = remarks;
     }
 
+    public String getStudentProfileId() { return studentProfileId; }
+    public void setStudentProfileId(String studentProfileId) { this.studentProfileId = studentProfileId; }
+
+    public String getStudentName() { return studentName; }
+    public void setStudentName(String studentName) { this.studentName = studentName; }
+
+    public String getEnrollmentNumber() { return enrollmentNumber; }
+    public void setEnrollmentNumber(String enrollmentNumber) { this.enrollmentNumber = enrollmentNumber; }
+
     public static AttendanceRecordResponseBuilder builder() {
         return new AttendanceRecordResponseBuilder();
     }
@@ -88,6 +100,9 @@ public class AttendanceRecordResponse {
         private String courseId;
         private String courseCode;
         private String courseTitle;
+        private String studentProfileId;
+        private String studentName;
+        private String enrollmentNumber;
         private LocalDate date;
         private String status;
         private String remarks;
@@ -114,6 +129,21 @@ public class AttendanceRecordResponse {
             return this;
         }
 
+        public AttendanceRecordResponseBuilder studentProfileId(String studentProfileId) {
+            this.studentProfileId = studentProfileId;
+            return this;
+        }
+
+        public AttendanceRecordResponseBuilder studentName(String studentName) {
+            this.studentName = studentName;
+            return this;
+        }
+
+        public AttendanceRecordResponseBuilder enrollmentNumber(String enrollmentNumber) {
+            this.enrollmentNumber = enrollmentNumber;
+            return this;
+        }
+
         public AttendanceRecordResponseBuilder date(LocalDate date) {
             this.date = date;
             return this;
@@ -135,6 +165,9 @@ public class AttendanceRecordResponse {
             instance.courseId = this.courseId;
             instance.courseCode = this.courseCode;
             instance.courseTitle = this.courseTitle;
+            instance.studentProfileId = this.studentProfileId;
+            instance.studentName = this.studentName;
+            instance.enrollmentNumber = this.enrollmentNumber;
             instance.date = this.date;
             instance.status = this.status;
             instance.remarks = this.remarks;

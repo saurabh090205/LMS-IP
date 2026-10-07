@@ -25,15 +25,21 @@ public class AcademicService {
     private final CourseRepository courseRepository;
     private final UnitRepository unitRepository;
     private final TopicRepository topicRepository;
+    private final com.shreenil.academic.repository.AcademicModuleRepository academicModuleRepository;
+    private final com.shreenil.profile.repository.EnrollmentRepository enrollmentRepository;
 
     public AcademicService(ProgramRepository programRepository,
-                             CourseRepository courseRepository,
-                             UnitRepository unitRepository,
-                             TopicRepository topicRepository) {
+                           CourseRepository courseRepository,
+                           UnitRepository unitRepository,
+                           TopicRepository topicRepository,
+                           com.shreenil.academic.repository.AcademicModuleRepository academicModuleRepository,
+                           com.shreenil.profile.repository.EnrollmentRepository enrollmentRepository) {
         this.programRepository = programRepository;
         this.courseRepository = courseRepository;
         this.unitRepository = unitRepository;
         this.topicRepository = topicRepository;
+        this.academicModuleRepository = academicModuleRepository;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
 
@@ -230,5 +236,128 @@ public class AcademicService {
                 .hasResources(!resources.isEmpty())
                 .status(status)
                 .build();
+    }
+
+    @Transactional
+    public CourseDetailResponse createCourse(CourseCreateRequest req) {
+        String courseId = "course-" + req.getCourseCode().toLowerCase().replaceAll("[^a-z0-9]", "-");
+        AcademicModule module = null;
+        if (req.getAcademicModuleId() != null && !req.getAcademicModuleId().isBlank()) {
+            module = academicModuleRepository.findById(req.getAcademicModuleId()).orElse(null);
+        }
+        if (module == null) {
+            module = academicModuleRepository.findById("module-v").orElse(null);
+        }
+
+        Course course = Course.builder()
+                .id(courseId)
+                .academicModule(module)
+                .courseCode(req.getCourseCode())
+                .courseStructureCode(req.getCourseCode())
+                .syllabusCode(req.getCourseCode())
+                .title(req.getTitle())
+                .credits(req.getCredits() != null ? req.getCredits() : java.math.BigDecimal.valueOf(4))
+                .theoryHours(req.getTheoryHours() != null ? req.getTheoryHours() : 3)
+                .labHours(req.getLabHours() != null ? req.getLabHours() : 2)
+                .tutorialHours(req.getTutorialHours() != null ? req.getTutorialHours() : 0)
+                .department(req.getDepartment() != null ? req.getDepartment() : "CSE (AI)")
+                .badgeColor(req.getBadgeColor() != null ? req.getBadgeColor() : "indigo")
+                .prerequisites(req.getPrerequisites())
+                .objectives(req.getObjectives())
+                .courseRelevance(req.getCourseRelevance())
+                .build();
+
+        Course saved = courseRepository.save(course);
+        return mapToCourseDetail(saved);
+    }
+
+    @Transactional
+    public CourseDetailResponse updateCourse(String id, CourseCreateRequest req) {
+        Course course = courseRepository.findById(id)
+                .or(() -> courseRepository.findByCourseCode(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
+
+        if (req.getTitle() != null && !req.getTitle().isBlank()) course.setTitle(req.getTitle());
+        if (req.getCredits() != null) course.setCredits(req.getCredits());
+        if (req.getTheoryHours() != null) course.setTheoryHours(req.getTheoryHours());
+        if (req.getLabHours() != null) course.setLabHours(req.getLabHours());
+        if (req.getTutorialHours() != null) course.setTutorialHours(req.getTutorialHours());
+        if (req.getDepartment() != null) course.setDepartment(req.getDepartment());
+        if (req.getBadgeColor() != null) course.setBadgeColor(req.getBadgeColor());
+        if (req.getPrerequisites() != null) course.setPrerequisites(req.getPrerequisites());
+        if (req.getObjectives() != null) course.setObjectives(req.getObjectives());
+        if (req.getCourseRelevance() != null) course.setCourseRelevance(req.getCourseRelevance());
+
+        Course saved = courseRepository.save(course);
+        return mapToCourseDetail(saved);
+    }
+
+    @Transactional
+    public UnitResponse createUnit(String courseId, UnitCreateRequest req) {
+        Course course = courseRepository.findById(courseId)
+                .or(() -> courseRepository.findByCourseCode(courseId))
+                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
+
+        int unitNum = req.getUnitNumber() != null ? req.getUnitNumber() : 1;
+        String unitId = course.getId() + "-unit-" + unitNum;
+
+        Unit unit = Unit.builder()
+                .id(unitId)
+                .course(course)
+                .unitNumber(unitNum)
+                .title(req.getTitle())
+                .theoryHours(req.getTheoryHours() != null ? req.getTheoryHours() : 6)
+                .coMapping(req.getCoMapping() != null ? req.getCoMapping() : "CO" + unitNum)
+                .build();
+
+        Unit saved = unitRepository.save(unit);
+        return mapToUnitResponse(saved);
+    }
+
+    @Transactional
+    public TopicResponse createTopic(String unitId, TopicCreateRequest req) {
+        Unit unit = unitRepository.findById(unitId)
+                .orElseThrow(() -> new ResourceNotFoundException("Unit", "id", unitId));
+
+        int topicNum = req.getTopicNumber() != null ? req.getTopicNumber() : 1;
+        String topicId = unit.getId() + "-t-" + topicNum + "-" + System.currentTimeMillis() % 10000;
+
+        Topic topic = Topic.builder()
+                .id(topicId)
+                .unit(unit)
+                .topicNumber(topicNum)
+                .title(req.getTitle())
+                .estimatedMinutes(req.getEstimatedMinutes() != null ? req.getEstimatedMinutes() : 45)
+                .build();
+
+        Topic saved = topicRepository.save(topic);
+        return mapToTopicResponse(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RosterStudentResponse> getCourseRoster(String courseId) {
+        Course course = courseRepository.findById(courseId)
+                .or(() -> courseRepository.findByCourseCode(courseId))
+                .orElse(null);
+
+        String targetCourseId = course != null ? course.getId() : courseId;
+        List<com.shreenil.profile.domain.Enrollment> enrollments = enrollmentRepository.findByCourseId(targetCourseId);
+
+        return enrollments.stream().map(e -> {
+            var profile = e.getStudentProfile();
+            var user = profile != null ? profile.getUser() : null;
+            return RosterStudentResponse.builder()
+                    .id(e.getId())
+                    .studentProfileId(profile != null ? profile.getId() : "unknown")
+                    .studentName(user != null ? user.getFirstName() + " " + user.getLastName() : "Enrolled Student")
+                    .email(user != null ? user.getEmail() : "")
+                    .enrollmentNumber(profile != null ? profile.getEnrollmentNumber() : "")
+                    .section(profile != null ? profile.getSection() : "Division AI-1")
+                    .attendancePercentage(profile != null ? profile.getAttendancePercentage() : java.math.BigDecimal.valueOf(95.0))
+                    .progressPercentage(e.getProgressPercentage())
+                    .finalGrade(e.getFinalGrade() != null ? e.getFinalGrade() : "A")
+                    .status(e.getStatus())
+                    .build();
+        }).collect(Collectors.toList());
     }
 }

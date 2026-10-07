@@ -282,6 +282,9 @@ export interface AttendanceRecordResponse {
   courseId?: string;
   courseCode: string;
   courseTitle: string;
+  studentProfileId?: string;
+  studentName?: string;
+  enrollmentNumber?: string;
   date: string;
   status: 'PRESENT' | 'ABSENT' | 'LATE' | 'EXCUSED';
   remarks?: string;
@@ -381,3 +384,131 @@ export interface DashboardResponse {
   enrolledCourses: CourseSummaryResponse[];
   achievements: AchievementResponse[];
 }
+
+export interface RosterStudentResponse {
+  id: string;
+  studentProfileId: string;
+  studentName: string;
+  email: string;
+  enrollmentNumber: string;
+  section?: string;
+  attendancePercentage: number;
+  progressPercentage: number;
+  finalGrade?: string;
+  status: string;
+}
+
+export interface FacultySubmissionResponse {
+  id: string;
+  assignmentId: string;
+  assignmentTitle: string;
+  courseId: string;
+  courseCode: string;
+  courseTitle: string;
+  studentProfileId: string;
+  studentName: string;
+  studentEmail: string;
+  submissionDate: string;
+  status: string;
+  contentText?: string;
+  fileName?: string;
+  fileUrl?: string;
+  marksAwarded?: number;
+  maxMarks?: number;
+  feedback?: string;
+  gradedAt?: string;
+  gradedBy?: string;
+}
+
+export interface AssignmentCreateRequest {
+  courseId: string;
+  unitId?: string;
+  title: string;
+  description: string;
+  instructions?: string;
+  dueDate?: string;
+  maxMarks?: number;
+  submissionType?: string;
+}
+
+export interface GradeSubmissionRequest {
+  marksAwarded: number;
+  feedback: string;
+  gradedBy?: string;
+}
+
+export interface LiveClassCreateRequest {
+  courseId: string;
+  title: string;
+  teacherName?: string;
+  startTime: string;
+  endTime: string;
+  meetingUrl?: string;
+  jitsiRoomName?: string;
+}
+
+export interface BatchAttendanceRequest {
+  courseId: string;
+  attendanceDate: string;
+  entries: {
+    studentProfileId: string;
+    status: 'PRESENT' | 'ABSENT' | 'LATE' | 'EXCUSED';
+    remarks?: string;
+  }[];
+}
+
+export interface AssessmentGradeEntry {
+  id?: string;
+  assessmentName: string;
+  marksObtained: number;
+  maxMarks: number;
+  letterGrade?: string;
+}
+
+export interface StudentGradeEntry {
+  studentProfileId: string;
+  studentName: string;
+  enrollmentNumber: string;
+  avatarUrl?: string;
+  attendanceRate: number;
+  assessments: AssessmentGradeEntry[];
+  totalMarks: number;
+  averagePercentage: number;
+  finalGrade: string;
+}
+
+export interface CourseGradebookResponse {
+  courseId: string;
+  courseCode: string;
+  courseTitle: string;
+  students: StudentGradeEntry[];
+}
+
+export interface CourseCreateRequest {
+  courseCode: string;
+  title: string;
+  credits: number;
+  department: string;
+  semester: string;
+  academicModuleId?: string;
+  badgeColor?: string;
+  courseStructureCode?: string;
+  syllabusCode?: string;
+  prerequisites?: string;
+  objectives?: string;
+}
+
+export interface UnitCreateRequest {
+  unitNumber: number;
+  title: string;
+  theoryHours?: number;
+  coMapping?: string;
+}
+
+export interface TopicCreateRequest {
+  topicNumber: number;
+  title: string;
+  description?: string;
+  estimatedMinutes?: number;
+}
+

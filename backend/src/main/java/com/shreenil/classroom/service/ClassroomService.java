@@ -15,31 +15,37 @@ import com.shreenil.classroom.repository.TimetableSlotRepository;
 import com.shreenil.common.ResourceNotFoundException;
 import com.shreenil.profile.domain.StudentProfile;
 import com.shreenil.profile.service.StudentProfileService;
+import com.shreenil.academic.domain.Course;
+import com.shreenil.academic.repository.CourseRepository;
+import com.shreenil.classroom.dto.LiveClassCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ClassroomService {
     private static final Logger log = LoggerFactory.getLogger(ClassroomService.class);
 
-
     private final LiveClassRepository liveClassRepository;
     private final RecordedLectureRepository recordedLectureRepository;
     private final TimetableSlotRepository timetableSlotRepository;
     private final StudentProfileService studentProfileService;
+    private final CourseRepository courseRepository;
 
     public ClassroomService(LiveClassRepository liveClassRepository,
                              RecordedLectureRepository recordedLectureRepository,
                              TimetableSlotRepository timetableSlotRepository,
-                             StudentProfileService studentProfileService) {
+                             StudentProfileService studentProfileService,
+                             CourseRepository courseRepository) {
         this.liveClassRepository = liveClassRepository;
         this.recordedLectureRepository = recordedLectureRepository;
         this.timetableSlotRepository = timetableSlotRepository;
         this.studentProfileService = studentProfileService;
+        this.courseRepository = courseRepository;
     }
 
 
@@ -122,6 +128,46 @@ public class ClassroomService {
                 .jitsiRoomName(lc.getJitsiRoomName())
                 .status(lc.getStatus())
                 .build();
+    }
+
+    @Transactional
+    public LiveClassResponse createLiveClass(LiveClassCreateRequest request) {
+        Course course = courseRepository.findById(request.getCourseId())
+                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", request.getCourseId()));
+
+        String roomName = request.getJitsiRoomName() != null && !request.getJitsiRoomName().isBlank()
+                ? request.getJitsiRoomName()
+                : "vit-lms-" + UUID.randomUUID().toString().substring(0, 8);
+
+        String meetingUrl = request.getMeetingUrl() != null && !request.getMeetingUrl().isBlank()
+                ? request.getMeetingUrl()
+                : "https://meet.jit.si/" + roomName;
+
+        LiveClass liveClass = LiveClass.builder()
+                .id("live-" + UUID.randomUUID().toString().substring(0, 8))
+                .course(course)
+                .title(request.getTitle())
+                .teacherName(request.getTeacherName() != null && !request.getTeacherName().isBlank()
+                        ? request.getTeacherName()
+                        : "Dr. Elena Rostova")
+                .startTime(request.getStartTime())
+                .endTime(request.getEndTime())
+                .jitsiRoomName(roomName)
+                .meetingUrl(meetingUrl)
+                .status("SCHEDULED")
+                .build();
+
+        liveClass = liveClassRepository.save(liveClass);
+        return mapToLiveClassResponse(liveClass);
+    }
+
+    @Transactional
+    public LiveClassResponse updateClassStatus(String id, String status) {
+        LiveClass liveClass = liveClassRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("LiveClass", "id", id));
+        liveClass.setStatus(status);
+        liveClass = liveClassRepository.save(liveClass);
+        return mapToLiveClassResponse(liveClass);
     }
 
     private RecordedLectureResponse mapToRecordedLectureResponse(RecordedLecture rl) {
