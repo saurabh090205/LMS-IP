@@ -13,9 +13,15 @@ import com.shreenil.homework.repository.AssignmentRepository;
 import com.shreenil.homework.repository.SubmissionRepository;
 import com.shreenil.profile.domain.StudentProfile;
 import com.shreenil.profile.service.StudentProfileService;
+import com.shreenil.academic.domain.Course;
+import com.shreenil.academic.repository.CourseRepository;
+import com.shreenil.homework.dto.AssignmentCreateRequest;
+import com.shreenil.homework.dto.FacultySubmissionResponse;
+import com.shreenil.homework.dto.GradeSubmissionRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,17 +32,19 @@ import java.util.stream.Collectors;
 public class HomeworkService {
     private static final Logger log = LoggerFactory.getLogger(HomeworkService.class);
 
-
     private final AssignmentRepository assignmentRepository;
     private final SubmissionRepository submissionRepository;
     private final StudentProfileService studentProfileService;
+    private final CourseRepository courseRepository;
 
     public HomeworkService(AssignmentRepository assignmentRepository,
                              SubmissionRepository submissionRepository,
-                             StudentProfileService studentProfileService) {
+                             StudentProfileService studentProfileService,
+                             CourseRepository courseRepository) {
         this.assignmentRepository = assignmentRepository;
         this.submissionRepository = submissionRepository;
         this.studentProfileService = studentProfileService;
+        this.courseRepository = courseRepository;
     }
 
 
@@ -134,6 +142,113 @@ public class HomeworkService {
                 .marksObtained(s.getMarksObtained())
                 .feedbackComments(s.getFeedbackComments())
                 .gradedAt(s.getGradedAt())
+                .build();
+    }
+
+    @Transactional
+    public AssignmentResponse createAssignment(AssignmentCreateRequest request) {
+        Course course = courseRepository.findById(request.getCourseId())
+                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", request.getCourseId()));
+
+        Assignment assignment = Assignment.builder()
+                .id("asg-" + UUID.randomUUID().toString().substring(0, 8))
+                .course(course)
+                .title(request.getTitle())
+                .description(request.getDescription())
+                .dueDate(request.getDueDate() != null ? request.getDueDate() : OffsetDateTime.now().plusWeeks(1))
+                .maxMarks(request.getMaxMarks() != null ? request.getMaxMarks() : new BigDecimal("100.00"))
+                .submissionType(request.getSubmissionType() != null ? request.getSubmissionType() : "FILE_UPLOAD")
+                .status("PUBLISHED")
+                .build();
+
+        assignment = assignmentRepository.save(assignment);
+        return mapToAssignmentResponse(assignment, null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AssignmentResponse> getAllAssignments() {
+        return assignmentRepository.findAll().stream()
+                .map(a -> mapToAssignmentResponse(a, null))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<AssignmentResponse> getAssignmentsByCourse(String courseId) {
+        return assignmentRepository.findByCourseId(courseId).stream()
+                .map(a -> mapToAssignmentResponse(a, null))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<FacultySubmissionResponse> getAssignmentSubmissions(String assignmentId) {
+        return submissionRepository.findByAssignmentId(assignmentId).stream()
+                .map(this::mapToFacultySubmission)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<FacultySubmissionResponse> getPendingSubmissions() {
+        List<Submission> submissions = submissionRepository.findByStatus("SUBMITTED");
+        List<Submission> resubmitted = submissionRepository.findByStatus("RESUBMITTED");
+        submissions.addAll(resubmitted);
+        return submissions.stream()
+                .map(this::mapToFacultySubmission)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<FacultySubmissionResponse> getAllSubmissions() {
+        return submissionRepository.findAll().stream()
+                .map(this::mapToFacultySubmission)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public FacultySubmissionResponse gradeSubmission(String submissionId, GradeSubmissionRequest request) {
+        Submission submission = submissionRepository.findById(submissionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Submission", "id", submissionId));
+
+        submission.setMarksObtained(request.getMarksAwarded());
+        submission.setFeedbackComments(request.getFeedback());
+        submission.setStatus("GRADED");
+        submission.setGradedAt(OffsetDateTime.now());
+        submission = submissionRepository.save(submission);
+
+        return mapToFacultySubmission(submission);
+    }
+
+    private FacultySubmissionResponse mapToFacultySubmission(Submission s) {
+        String studentName = "Student";
+        String studentEmail = "student@vit.edu";
+        if (s.getStudentProfile() != null) {
+            if (s.getStudentProfile().getUser() != null) {
+                studentName = s.getStudentProfile().getUser().getFirstName() + " " + s.getStudentProfile().getUser().getLastName();
+                studentEmail = s.getStudentProfile().getUser().getEmail();
+            } else if (s.getStudentProfile().getEnrollmentNumber() != null) {
+                studentName = s.getStudentProfile().getEnrollmentNumber();
+            }
+        }
+        Assignment a = s.getAssignment();
+        return FacultySubmissionResponse.builder()
+                .id(s.getId())
+                .assignmentId(a != null ? a.getId() : "")
+                .assignmentTitle(a != null ? a.getTitle() : "")
+                .courseId(a != null && a.getCourse() != null ? a.getCourse().getId() : "")
+                .courseCode(a != null && a.getCourse() != null ? a.getCourse().getCourseCode() : "")
+                .courseTitle(a != null && a.getCourse() != null ? a.getCourse().getTitle() : "")
+                .studentProfileId(s.getStudentProfile() != null ? s.getStudentProfile().getId() : "")
+                .studentName(studentName)
+                .studentEmail(studentEmail)
+                .submissionDate(s.getSubmissionDate())
+                .status(s.getStatus())
+                .contentText(s.getContentText())
+                .fileName(s.getFileName())
+                .fileUrl(s.getFileUrl())
+                .marksAwarded(s.getMarksObtained())
+                .maxMarks(a != null ? a.getMaxMarks() : null)
+                .feedback(s.getFeedbackComments())
+                .gradedAt(s.getGradedAt())
+                .gradedBy("Dr. Elena Rostova")
                 .build();
     }
 }

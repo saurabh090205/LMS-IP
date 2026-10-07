@@ -135,7 +135,7 @@ cd frontend
 npm install
 npm run dev
 ```
-- Student Portal: `http://localhost:5173` (or port indicated in Vite output)
+- Student Portal: `http://localhost:5180` (or configured port)
 
 ---
 

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, String> {
     List<Enrollment> findByStudentProfileId(String studentProfileId);
+    List<Enrollment> findByCourseId(String courseId);
 }

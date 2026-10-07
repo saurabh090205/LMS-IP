@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   BookOpen,
@@ -36,11 +36,34 @@ import {
   teacherActivities,
 } from '../../lib/mockData';
 import { mockCourses } from '../../features/courses/mockData';
+import { teacherApi } from '../../services/api/teacherApi';
 
 export default function TeacherDashboard() {
   const { user } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
+
+  const [liveCoursesCount, setLiveCoursesCount] = useState<number>(4);
+  const [pendingCount, setPendingCount] = useState<number>(4);
+  const [classesCount, setClassesCount] = useState<number>(2);
+
+  useEffect(() => {
+    async function fetchDashboardMetrics() {
+      try {
+        const [courses, pending, classes] = await Promise.all([
+          teacherApi.getCourses().catch(() => []),
+          teacherApi.getPendingSubmissions().catch(() => []),
+          teacherApi.getClasses().catch(() => []),
+        ]);
+        if (courses && courses.length > 0) setLiveCoursesCount(courses.length);
+        if (pending && pending.length > 0) setPendingCount(pending.length);
+        if (classes && classes.length > 0) setClassesCount(classes.length);
+      } catch (e) {
+        console.warn('Using default metrics', e);
+      }
+    }
+    fetchDashboardMetrics();
+  }, []);
 
   const handleAction = (title: string, desc: string) => {
     addToast({
@@ -61,7 +84,7 @@ export default function TeacherDashboard() {
     {
       id: 'qa-speedgrader',
       label: 'SpeedGrader',
-      description: '4 Pending Submissions',
+      description: `${pendingCount} Pending Submissions`,
       icon: Award,
       onClick: () => navigate('/teacher/grading'),
     },
@@ -95,7 +118,7 @@ export default function TeacherDashboard() {
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-slate-500">
-            You have <strong className="text-slate-800 font-medium">2 live classes today</strong> and <strong className="text-[#9A3412] font-medium">4 student submissions</strong> awaiting grading.
+            You have <strong className="text-slate-800 font-medium">{classesCount} live classes today</strong> and <strong className="text-[#9A3412] font-medium">{pendingCount} student submissions</strong> awaiting grading.
           </p>
         </div>
 

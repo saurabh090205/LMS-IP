@@ -10,4 +10,6 @@ import java.util.List;
 public interface StudentGradeRecordRepository extends JpaRepository<StudentGradeRecord, String> {
     List<StudentGradeRecord> findByStudentProfileId(String studentProfileId);
     List<StudentGradeRecord> findByStudentProfileIdAndSemesterNumber(String studentProfileId, Integer semesterNumber);
+    List<StudentGradeRecord> findByCourseId(String courseId);
+    List<StudentGradeRecord> findByCourseIdAndStudentProfileId(String courseId, String studentProfileId);
 }

@@ -12,13 +12,25 @@ export const apiClient = axios.create({
   timeout: 15000,
 });
 
-// Request interceptor to attach Keycloak JWT token
+// Request interceptor to attach Keycloak JWT token and dev role headers
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('auth_token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    const activeRole = localStorage.getItem('shreenil_active_role') || 'student';
+    if (config.headers) {
+      if (activeRole === 'teacher') {
+        config.headers['X-Dev-Role'] = 'TEACHER';
+        config.headers['X-Dev-User-Id'] = 'usr-faculty-elena';
+      } else {
+        config.headers['X-Dev-Role'] = 'STUDENT';
+        config.headers['X-Dev-User-Id'] = 'usr-student-aarav';
+      }
+    }
+
     return config;
   },
   (error) => Promise.reject(error)

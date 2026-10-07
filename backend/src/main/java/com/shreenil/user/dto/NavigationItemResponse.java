@@ -10,11 +10,12 @@ public class NavigationItemResponse {
     private String section;
     private boolean isComingSoon;
     private Integer badgeCount;
+    private String badge;
     private List<NavigationItemResponse> children;
 
     public NavigationItemResponse() {}
 
-    public NavigationItemResponse(String id, String label, String path, String icon, String section, boolean isComingSoon, Integer badgeCount, List<NavigationItemResponse> children) {
+    public NavigationItemResponse(String id, String label, String path, String icon, String section, boolean isComingSoon, Integer badgeCount, String badge, List<NavigationItemResponse> children) {
         this.id = id;
         this.label = label;
         this.path = path;
@@ -22,6 +23,7 @@ public class NavigationItemResponse {
         this.section = section;
         this.isComingSoon = isComingSoon;
         this.badgeCount = badgeCount;
+        this.badge = badge;
         this.children = children;
     }
 
@@ -81,6 +83,14 @@ public class NavigationItemResponse {
         this.badgeCount = badgeCount;
     }
 
+    public String getBadge() {
+        return this.badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
+    }
+
     public List<NavigationItemResponse> getChildren() {
         return this.children;
     }
@@ -101,6 +111,7 @@ public class NavigationItemResponse {
         private String section;
         private boolean isComingSoon;
         private Integer badgeCount;
+        private String badge;
         private List<NavigationItemResponse> children;
 
         public NavigationItemResponseBuilder() {}
@@ -140,6 +151,11 @@ public class NavigationItemResponse {
             return this;
         }
 
+        public NavigationItemResponseBuilder badge(String badge) {
+            this.badge = badge;
+            return this;
+        }
+
         public NavigationItemResponseBuilder children(List<NavigationItemResponse> children) {
             this.children = children;
             return this;
@@ -154,6 +170,7 @@ public class NavigationItemResponse {
             instance.section = this.section;
             instance.isComingSoon = this.isComingSoon;
             instance.badgeCount = this.badgeCount;
+            instance.badge = this.badge;
             instance.children = this.children;
             return instance;
         }

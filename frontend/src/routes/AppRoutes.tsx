@@ -21,6 +21,9 @@ import CourseBuilderPage from '../pages/teacher/CourseBuilderPage';
 import CourseRosterPage from '../pages/teacher/CourseRosterPage';
 import GradingQueuePage from '../pages/teacher/GradingQueuePage';
 import TeacherGradebookPage from '../pages/teacher/TeacherGradebookPage';
+import TeacherClassesPage from '../pages/teacher/TeacherClassesPage';
+import TeacherAssignmentsPage from '../pages/teacher/TeacherAssignmentsPage';
+import TeacherAttendancePage from '../pages/teacher/TeacherAttendancePage';
 
 // Student LMS & Academic Pages
 import StudentCoursesPage from '../pages/student/StudentCoursesPage';
@@ -153,9 +156,9 @@ export default function AppRoutes() {
         <Route path="/teacher/courses/:id/students" element={<CourseRosterPage />} />
         <Route path="/teacher/grading" element={<GradingQueuePage />} />
         <Route path="/teacher/gradebook" element={<TeacherGradebookPage />} />
-        <Route path="/teacher/classes" element={<StudentClassroomPage />} />
-        <Route path="/teacher/assignments" element={<GradingQueuePage />} />
-        <Route path="/teacher/attendance" element={<StudentAttendancePage />} />
+        <Route path="/teacher/classes" element={<TeacherClassesPage />} />
+        <Route path="/teacher/assignments" element={<TeacherAssignmentsPage />} />
+        <Route path="/teacher/attendance" element={<TeacherAttendancePage />} />
         <Route path="/teacher/calendar" element={<StudentTimetablePage />} />
         <Route path="/teacher/messages" element={<PrototypeViewPage title="Student Messages" />} />
 
