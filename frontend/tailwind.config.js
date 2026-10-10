@@ -1,22 +1,29 @@
-/** @type {import('tailwindcss').Config} */
+﻿/** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
         shreenil: {
-          50: '#f5f5ff',
-          100: '#eef0ff',
-          200: '#e0e7ff',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
-          950: '#1e1b4b',
-          bg: '#F6F6FB',
+          50: '#EFF9F3',
+          100: '#D6F2E3',
+          200: '#B0E7CB',
+          300: '#7CD6AB',
+          400: '#4EC48C',
+          500: '#36B875',
+          600: '#239B5E',
+          700: '#18794E',
+          800: '#156140',
+          900: '#135035',
+          950: '#0A2D1E',
+          primary: '#36B875',
+          dark: '#18794E',
+          mint: '#EFF9F3',
+          bg: '#F6F8F7',
           surface: '#FFFFFF',
-          border: '#E7E7F0',
+          text: '#18221D',
+          muted: '#6B756F',
+          border: '#E5EBE7',
         },
         pastel: {
           blue: {
@@ -32,10 +39,10 @@ export default {
             subtle: '#F5F3FF',
           },
           mint: {
-            bg: '#DDF4EA',
-            text: '#065F46',
-            border: '#A7F3D0',
-            subtle: '#ECFDF5',
+            bg: '#EFF9F3',
+            text: '#18794E',
+            border: '#B0E7CB',
+            subtle: '#EFF9F3',
           },
           peach: {
             bg: '#FBE1D8',
@@ -63,12 +70,14 @@ export default {
       },
       boxShadow: {
         'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.02)',
-        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 2px 0 rgba(0, 0, 0, 0.02)',
-        'card-hover': '0 4px 16px 0 rgba(31, 41, 55, 0.04), 0 1px 3px 0 rgba(31, 41, 55, 0.02)',
+        'card': '0 2px 8px -2px rgba(24, 34, 29, 0.04), 0 1px 3px 0 rgba(24, 34, 29, 0.02)',
+        'card-hover': '0 10px 25px -5px rgba(24, 34, 29, 0.06), 0 8px 10px -6px rgba(24, 34, 29, 0.03)',
+        'mint': '0 4px 14px 0 rgba(54, 184, 117, 0.25)',
       },
       borderRadius: {
-        'xl': '0.75rem', // 12px
-        '2xl': '1rem',    // 16px
+        'xl': '0.75rem',
+        '2xl': '1rem',
+        '3xl': '1.25rem',
       },
     },
   },

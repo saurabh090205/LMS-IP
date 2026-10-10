@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -15,6 +15,9 @@ import {
   BookOpen,
   Users,
   CheckCircle2,
+  Heart,
+  Bookmark,
+  Layers,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
@@ -33,7 +36,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
   const { addToast } = useToast();
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const roleLabels: Record<UserRole, { label: string; badge: string; icon: typeof User }> = {
     student: { label: 'Student View', badge: 'Enrolled', icon: BookOpen },
@@ -62,62 +65,119 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
     navigate('/login');
   };
 
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setIsSearchOpen(true);
+    }
+  };
+
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#E7E7F0] bg-white/95 backdrop-blur-xs px-4 sm:px-6">
-        {/* Left Side: Mobile Menu Button & Brand */}
-        <div className="flex items-center gap-3 sm:gap-4">
+      <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#E5EBE7] bg-white/95 backdrop-blur-xs px-4 sm:px-6">
+        {/* Left Side: Mobile Menu Button & Categories dropdown */}
+        <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={onToggleMobileSidebar}
-            className="lg:hidden p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-[#F6F6FB] transition-colors"
+            className="lg:hidden p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-[#F6F8F7] transition-colors"
             aria-label="Open sidebar menu"
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#4F46E5] text-white shadow-[0_1px_2px_0_rgba(79,70,229,0.2)] group-hover:bg-[#4338CA] transition-colors">
-              <GraduationCap className="h-5 w-5" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm sm:text-base font-bold text-slate-900 tracking-tight leading-none group-hover:text-[#4F46E5] transition-colors">
-                Shreenil
-              </span>
-              <span className="text-[10px] font-semibold text-[#4F46E5] tracking-wider uppercase mt-0.5">
-                Virtual University
-              </span>
-            </div>
-          </Link>
-        </div>
-
-        {/* Center: Global Search Bar */}
-        <div className="hidden md:flex flex-1 max-w-md mx-6">
-          <button
-            type="button"
-            onClick={() => setIsSearchOpen(true)}
-            className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl border border-[#E7E7F0] bg-[#F6F6FB] hover:bg-[#EEF0FF]/50 text-slate-400 hover:text-slate-600 transition-colors text-xs"
+          {/* Reference 1: Categories dropdown pill */}
+          <Dropdown
+            align="left"
+            trigger={
+              <button
+                type="button"
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[#E5EBE7] bg-[#F6F8F7] hover:bg-slate-100 text-[#18221D] text-xs font-semibold transition-colors"
+              >
+                <Layers className="w-3.5 h-3.5 text-[#36B875]" />
+                <span>Categories</span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
+            }
           >
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-slate-400" />
-              <span>Search courses, modules, assignments, faculty...</span>
+            <div className="py-1 min-w-[180px]">
+              <button
+                onClick={() => navigate('/student/courses')}
+                className="w-full px-3 py-2 text-left text-xs text-[#18221D] hover:bg-[#EFF9F3] hover:text-[#18794E] flex items-center justify-between"
+              >
+                <span>AI & Deep Learning</span>
+                <span className="text-[10px] text-slate-400">CI3001</span>
+              </button>
+              <button
+                onClick={() => navigate('/student/courses')}
+                className="w-full px-3 py-2 text-left text-xs text-[#18221D] hover:bg-[#EFF9F3] hover:text-[#18794E] flex items-center justify-between"
+              >
+                <span>Operating Systems</span>
+                <span className="text-[10px] text-slate-400">CI3202</span>
+              </button>
+              <button
+                onClick={() => navigate('/student/courses')}
+                className="w-full px-3 py-2 text-left text-xs text-[#18221D] hover:bg-[#EFF9F3] hover:text-[#18794E] flex items-center justify-between"
+              >
+                <span>MLOPS & Pipelines</span>
+                <span className="text-[10px] text-slate-400">CI3003D</span>
+              </button>
+              <button
+                onClick={() => navigate('/student/courses')}
+                className="w-full px-3 py-2 text-left text-xs text-[#18221D] hover:bg-[#EFF9F3] hover:text-[#18794E] flex items-center justify-between"
+              >
+                <span>Distributed Learning</span>
+                <span className="text-[10px] text-slate-400">CI3203B</span>
+              </button>
             </div>
-            <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded-md bg-white border border-[#E7E7F0] text-[10px] font-mono text-slate-400 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)]">
-              ⌘K
-            </kbd>
-          </button>
+          </Dropdown>
         </div>
 
-        {/* Right Side: Role Quick Switcher, Notifications, Help & Profile */}
+        {/* Center: Search Bar with Green "Search" Button (Matching Reference 1) */}
+        <div className="flex-1 max-w-lg mx-4">
+          <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onClick={() => setIsSearchOpen(true)}
+              placeholder="Start typing your search..."
+              className="w-full pl-4 pr-24 py-1.5 sm:py-2 bg-[#F6F8F7] border border-[#E5EBE7] rounded-full text-xs text-[#18221D] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#36B875]/20 focus:border-[#36B875] transition-all cursor-pointer"
+            />
+            <button
+              type="submit"
+              className="absolute right-1 px-4 py-1 sm:py-1.5 rounded-full bg-[#36B875] hover:bg-[#239B5E] text-white text-xs font-semibold shadow-xs transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <span>Search</span>
+            </button>
+          </form>
+        </div>
+
+        {/* Right Side: Quick Action Icons & Profile (Matching Reference 1) */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Mobile search trigger */}
+          {/* Quick Bookmark / Tasks */}
           <button
             type="button"
-            onClick={() => setIsSearchOpen(true)}
-            className="md:hidden p-2 rounded-xl text-slate-500 hover:bg-[#F6F6FB]"
-            aria-label="Open search"
+            onClick={() => navigate('/student/assignments')}
+            className="hidden md:flex p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-[#F6F8F7] transition-colors relative"
+            title="My Assignments"
           >
-            <Search className="w-5 h-5" />
+            <Bookmark className="w-4 h-4 text-slate-500" />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500" />
+          </button>
+
+          {/* Notification Bell with red badge */}
+          <button
+            type="button"
+            onClick={() => navigate('/student/notifications')}
+            className="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-[#F6F8F7] transition-colors relative"
+            title="Notifications"
+          >
+            <Bell className="w-4 h-4 text-slate-500" />
+            <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            </span>
           </button>
 
           {/* Role Switcher Pill */}
@@ -126,139 +186,101 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
             trigger={
               <button
                 type="button"
-                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[#E7E7F0] bg-[#F6F6FB] hover:bg-[#EEF0FF]/60 text-slate-700 text-xs font-semibold transition-colors"
+                className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-[#E5EBE7] bg-[#EFF9F3] text-[#18794E] text-[11px] font-semibold transition-colors"
               >
-                <span className="w-2 h-2 rounded-full bg-[#4F46E5]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#36B875]" />
                 <span>{roleLabels[role].label}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                <ChevronDown className="w-3 h-3 text-[#18794E]/70" />
               </button>
             }
           >
-            <div className="px-3 py-2 border-b border-[#F1F1F8]">
-              <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Switch Experience</p>
+            <div className="px-3 py-2 border-b border-[#E5EBE7]">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Switch Profile Experience</p>
             </div>
             {(['student', 'teacher', 'parent', 'admin'] as UserRole[]).map((r) => (
               <button
                 key={r}
+                type="button"
                 onClick={() => handleRoleSwitch(r)}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-lg text-left transition-colors ${
-                  role === r ? 'bg-[#EEF0FF] text-[#4F46E5] font-semibold' : 'text-slate-700 hover:bg-[#F6F6FB]'
+                className={`w-full flex items-center justify-between px-3 py-2 text-xs transition-colors ${
+                  role === r
+                    ? 'bg-[#EFF9F3] text-[#18794E] font-bold'
+                    : 'text-[#6B756F] hover:bg-slate-50 hover:text-[#18221D]'
                 }`}
               >
-                <div className="flex items-center gap-2">
-                  <span className={`w-1.5 h-1.5 rounded-full ${role === r ? 'bg-[#4F46E5]' : 'bg-slate-300'}`} />
-                  {roleLabels[r].label}
-                </div>
-                {role === r && <CheckCircle2 className="w-3.5 h-3.5 text-[#4F46E5]" />}
+                <span>{roleLabels[r].label}</span>
+                {role === r && <CheckCircle2 className="w-3.5 h-3.5 text-[#36B875]" />}
               </button>
             ))}
           </Dropdown>
 
-          {/* Notifications Dropdown */}
+          {/* User Profile Avatar with Name & Dropdown (Matching Reference 1: "Tonmoy Khan v") */}
           <Dropdown
             align="right"
             trigger={
               <button
                 type="button"
-                className="relative p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-                aria-label="Notifications"
+                className="flex items-center gap-2 p-1 rounded-full sm:rounded-xl hover:bg-[#F6F8F7] transition-colors"
               >
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-indigo-600 ring-2 ring-white" />
+                <Avatar
+                  name={user.name}
+                  src={user.avatarUrl}
+                  size="sm"
+                  className="ring-2 ring-[#B0E7CB]"
+                />
+                <div className="hidden sm:flex flex-col text-left">
+                  <span className="text-xs font-bold text-[#18221D] leading-none">
+                    {user.name}
+                  </span>
+                  <span className="text-[10px] text-[#36B875] font-semibold mt-0.5">
+                    {role === 'student' ? 'Module V' : roleLabels[role].label}
+                  </span>
+                </div>
+                <ChevronDown className="hidden sm:block w-3.5 h-3.5 text-slate-400" />
               </button>
             }
           >
-            <div className="p-3 border-b border-slate-100 flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-900">Notifications</span>
-              <Badge variant="primary" size="sm">2 New</Badge>
+            <div className="px-4 py-3 border-b border-[#E5EBE7] bg-slate-50/50">
+              <p className="text-xs font-bold text-[#18221D]">{user.name}</p>
+              <p className="text-[10px] text-[#6B756F] truncate">{user.email}</p>
             </div>
-            <div className="p-2 flex flex-col gap-1 max-h-60 overflow-y-auto">
-              <div className="p-2 rounded-lg hover:bg-slate-50 transition-colors text-xs flex flex-col gap-0.5">
-                <span className="font-semibold text-slate-800">Grade Posted</span>
-                <span className="text-[11px] text-slate-500">CS-301 Midterm results are now available.</span>
-                <span className="text-[10px] text-slate-400 mt-1">10 mins ago</span>
-              </div>
-              <div className="p-2 rounded-lg hover:bg-slate-50 transition-colors text-xs flex flex-col gap-0.5">
-                <span className="font-semibold text-slate-800">System Notice</span>
-                <span className="text-[11px] text-slate-500">Virtual Lab scheduled maintenance on Sunday 2 AM.</span>
-                <span className="text-[10px] text-slate-400 mt-1">2 hours ago</span>
-              </div>
-            </div>
-            <div className="p-2 border-t border-slate-100 text-center">
+            <div className="py-1">
               <button
-                onClick={() => addToast({ title: 'Notifications Cleared', type: 'info' })}
-                className="text-[11px] font-semibold text-indigo-600 hover:underline"
+                onClick={() => navigate('/student/profile')}
+                className="w-full flex items-center gap-2 px-4 py-2 text-xs text-[#6B756F] hover:bg-[#EFF9F3] hover:text-[#18794E]"
               >
-                Mark all as read
-              </button>
-            </div>
-          </Dropdown>
-
-          {/* Help Button */}
-          <button
-            type="button"
-            onClick={() => {
-              addToast({
-                title: 'University Help Desk',
-                description: 'Support hotline: support@shreenil.edu • 24/7 Portal Support',
-                type: 'info',
-              });
-            }}
-            className="p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-            aria-label="Help and Documentation"
-          >
-            <HelpCircle className="w-5 h-5" />
-          </button>
-
-          {/* User Menu Dropdown */}
-          <Dropdown
-            align="right"
-            trigger={
-              <button type="button" className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-slate-200 transition-all">
-                <Avatar name={user.name} size="sm" status="online" />
-              </button>
-            }
-          >
-            <div className="px-3 py-2.5 border-b border-slate-100">
-              <p className="text-xs font-bold text-slate-900">{user.name}</p>
-              <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
-              <Badge variant="primary" size="sm" className="mt-1.5">
-                {roleLabels[role].label}
-              </Badge>
-            </div>
-
-            <div className="p-1">
-              <button
-                onClick={() => navigate('/profile')}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
-              >
-                <User className="w-4 h-4 text-slate-400" />
+                <User className="w-3.5 h-3.5" />
                 <span>My Profile</span>
               </button>
-
               <button
-                onClick={() => navigate('/settings')}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
+                onClick={() => navigate('/student/settings')}
+                className="w-full flex items-center gap-2 px-4 py-2 text-xs text-[#6B756F] hover:bg-[#EFF9F3] hover:text-[#18794E]"
               >
-                <Settings className="w-4 h-4 text-slate-400" />
-                <span>Account Settings</span>
+                <Settings className="w-3.5 h-3.5" />
+                <span>Preferences & Settings</span>
+              </button>
+              <button
+                onClick={() => navigate('/student/help')}
+                className="w-full flex items-center gap-2 px-4 py-2 text-xs text-[#6B756F] hover:bg-[#EFF9F3] hover:text-[#18794E]"
+              >
+                <HelpCircle className="w-3.5 h-3.5" />
+                <span>Help & FAQs</span>
               </button>
             </div>
-
-            <div className="p-1 border-t border-slate-100">
+            <div className="border-t border-[#E5EBE7] py-1">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-rose-600 hover:bg-rose-50 transition-colors"
+                className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50"
               >
-                <LogOut className="w-4 h-4" />
-                <span>Sign Out</span>
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Logout</span>
               </button>
             </div>
           </Dropdown>
         </div>
       </header>
 
-      {/* Global Search Modal */}
+      {/* Global Command Palette / Search Modal */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );

@@ -1,6 +1,5 @@
 package com.shreenil.profile.domain;
 
-import com.shreenil.academic.domain.Course;
 import com.shreenil.common.BaseEntity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -17,19 +16,19 @@ public class Achievement extends BaseEntity {
     @JoinColumn(name = "student_profile_id", nullable = false)
     private StudentProfile studentProfile;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 255)
     private String title;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "badge_type", nullable = false, length = 64)
     private String category;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "date_earned", nullable = false)
+    @Column(name = "awarded_date", nullable = false)
     private LocalDate dateEarned;
 
-    @Column(length = 64)
+    @Transient
     private String badge;
 
     public Achievement() {}
@@ -93,7 +92,7 @@ public class Achievement extends BaseEntity {
     }
 
     public String getBadge() {
-        return this.badge;
+        return this.badge != null ? this.badge : this.category;
     }
 
     public void setBadge(String badge) {

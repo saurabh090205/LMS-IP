@@ -2,6 +2,7 @@ package com.shreenil.profile.domain;
 
 import com.shreenil.common.BaseEntity;
 import jakarta.persistence.*;
+
 @Entity
 @Table(name = "student_skills")
 public class StudentSkill extends BaseEntity {
@@ -14,16 +15,19 @@ public class StudentSkill extends BaseEntity {
     @JoinColumn(name = "student_profile_id", nullable = false)
     private StudentProfile studentProfile;
 
-    @Column(name = "skill_name", nullable = false, length = 100)
+    @Column(name = "skill_name", nullable = false, length = 128)
     private String skillName;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 64)
     private String category;
 
-    @Column(name = "proficiency_score", nullable = false)
+    @Column(name = "proficiency_level")
     private Integer proficiencyScore;
 
-    @Column(name = "verified_by_course", length = 100)
+    @Column(name = "verified")
+    private Boolean verified;
+
+    @Transient
     private String verifiedByCourse;
 
     public StudentSkill() {}
@@ -35,6 +39,7 @@ public class StudentSkill extends BaseEntity {
         this.category = category;
         this.proficiencyScore = proficiencyScore;
         this.verifiedByCourse = verifiedByCourse;
+        this.verified = true;
     }
 
     public String getId() {
@@ -70,15 +75,26 @@ public class StudentSkill extends BaseEntity {
     }
 
     public Integer getProficiencyScore() {
-        return this.proficiencyScore;
+        return this.proficiencyScore != null ? this.proficiencyScore : 50;
     }
 
     public void setProficiencyScore(Integer proficiencyScore) {
         this.proficiencyScore = proficiencyScore;
     }
 
+    public Boolean getVerified() {
+        return this.verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
     public String getVerifiedByCourse() {
-        return this.verifiedByCourse;
+        if (this.verifiedByCourse != null) {
+            return this.verifiedByCourse;
+        }
+        return Boolean.TRUE.equals(this.verified) ? "Verified" : "In Progress";
     }
 
     public void setVerifiedByCourse(String verifiedByCourse) {
@@ -137,6 +153,7 @@ public class StudentSkill extends BaseEntity {
             instance.category = this.category;
             instance.proficiencyScore = this.proficiencyScore;
             instance.verifiedByCourse = this.verifiedByCourse;
+            instance.verified = true;
             return instance;
         }
     }

@@ -21,34 +21,37 @@ public class StudentProfile extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "program_id", nullable = false)
+    @JoinColumn(name = "program_id")
     private Program program;
 
-    @Column(name = "enrollment_number", nullable = false, unique = true, length = 64)
+    @Column(name = "student_id_number", length = 64)
     private String enrollmentNumber;
 
-    @Column(name = "current_semester", nullable = false)
-    private Integer currentSemester;
+    @Column(name = "grade_level")
+    private String gradeLevel;
 
-    @Column(name = "current_academic_year", nullable = false, length = 20)
-    private String currentAcademicYear;
+    @Transient
+    private Integer currentSemester = 5;
 
-    @Column(length = 20)
+    @Transient
+    private String currentAcademicYear = "AY 2026-27";
+
+    @Column(length = 32)
     private String section;
 
-    @Column(name = "cumulative_gpa", precision = 3, scale = 2)
+    @Column(name = "cgpa", precision = 4, scale = 2)
     private BigDecimal cumulativeGpa;
 
-    @Column(name = "attendance_percentage", precision = 5, scale = 2)
+    @Column(name = "attendance_rate", precision = 5, scale = 2)
     private BigDecimal attendancePercentage;
 
-    @Column(name = "learning_streak_days", nullable = false)
+    @Column(name = "study_streak_days")
     private Integer learningStreakDays;
 
-    @Column(name = "avatar_url", length = 512)
-    private String avatarUrl;
+    @Transient
+    private String avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces";
 
-    @Column(name = "bio_summary", columnDefinition = "TEXT")
+    @Column(name = "bio", columnDefinition = "TEXT")
     private String bioSummary;
 
     @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -117,7 +120,7 @@ public class StudentProfile extends BaseEntity {
     }
 
     public Integer getCurrentSemester() {
-        return this.currentSemester;
+        return this.currentSemester != null ? this.currentSemester : 5;
     }
 
     public void setCurrentSemester(Integer currentSemester) {
@@ -125,11 +128,19 @@ public class StudentProfile extends BaseEntity {
     }
 
     public String getCurrentAcademicYear() {
-        return this.currentAcademicYear;
+        return this.gradeLevel != null ? this.gradeLevel : (this.currentAcademicYear != null ? this.currentAcademicYear : "AY 2026-27");
     }
 
     public void setCurrentAcademicYear(String currentAcademicYear) {
         this.currentAcademicYear = currentAcademicYear;
+    }
+
+    public String getGradeLevel() {
+        return this.gradeLevel;
+    }
+
+    public void setGradeLevel(String gradeLevel) {
+        this.gradeLevel = gradeLevel;
     }
 
     public String getSection() {
@@ -157,7 +168,7 @@ public class StudentProfile extends BaseEntity {
     }
 
     public Integer getLearningStreakDays() {
-        return this.learningStreakDays;
+        return this.learningStreakDays != null ? this.learningStreakDays : 0;
     }
 
     public void setLearningStreakDays(Integer learningStreakDays) {
@@ -165,7 +176,7 @@ public class StudentProfile extends BaseEntity {
     }
 
     public String getAvatarUrl() {
-        return this.avatarUrl;
+        return this.avatarUrl != null ? this.avatarUrl : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces";
     }
 
     public void setAvatarUrl(String avatarUrl) {
@@ -221,8 +232,8 @@ public class StudentProfile extends BaseEntity {
         private User user;
         private Program program;
         private String enrollmentNumber;
-        private Integer currentSemester;
-        private String currentAcademicYear;
+        private Integer currentSemester = 5;
+        private String currentAcademicYear = "AY 2026-27";
         private String section;
         private BigDecimal cumulativeGpa;
         private BigDecimal attendancePercentage;

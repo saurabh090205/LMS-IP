@@ -2,6 +2,7 @@ package com.shreenil.profile.domain;
 
 import com.shreenil.common.BaseEntity;
 import jakarta.persistence.*;
+
 @Entity
 @Table(name = "student_interests")
 public class StudentInterest extends BaseEntity {
@@ -14,10 +15,10 @@ public class StudentInterest extends BaseEntity {
     @JoinColumn(name = "student_profile_id", nullable = false)
     private StudentProfile studentProfile;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "interest_name", nullable = false, length = 128)
     private String name;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "domain", nullable = false, length = 64)
     private String category;
 
     public StudentInterest() {}

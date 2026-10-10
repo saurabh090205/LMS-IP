@@ -1,4 +1,4 @@
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+﻿import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import type { ApiResponse } from '../../types/api';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/api/v1';
@@ -15,12 +15,12 @@ export const apiClient = axios.create({
 // Request interceptor to attach Keycloak JWT token and dev role headers
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('auth_token');
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('auth_token') : null;
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    const activeRole = localStorage.getItem('shreenil_active_role') || 'student';
+    const activeRole = typeof localStorage !== 'undefined' ? localStorage.getItem('shreenil_active_role') || 'student' : 'student';
     if (config.headers) {
       if (activeRole === 'teacher') {
         config.headers['X-Dev-Role'] = 'TEACHER';
@@ -33,26 +33,20 @@ apiClient.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error)
 );
 
-// Response interceptor for consistent response data extraction and error normalization
+// Response interceptor to handle global error codes and unwrapping
 apiClient.interceptors.response.use(
-  (response) => {
-    // If backend returns { success: true, data: ... }, extract data or return payload
-    if (response.data && typeof response.data === 'object' && 'data' in response.data) {
-      return response;
-    }
-    return response;
-  },
+  (response) => response,
   (error: AxiosError<ApiResponse<unknown>>) => {
-    if (error.response) {
-      const serverError = error.response.data;
-      const normalizedMessage = serverError?.message || error.message || 'An unexpected server error occurred';
-      return Promise.reject(new Error(normalizedMessage));
-    } else if (error.request) {
-      return Promise.reject(new Error('Unable to connect to Shreenil server. Please check your network.'));
+    const status = error.response?.status;
+    const message = error.response?.data?.message || error.message;
+
+    if (status === 401) {
+      console.warn('Unauthorized request - session expired or token invalid');
     }
-    return Promise.reject(error);
+
+    return Promise.reject(new Error(message));
   }
 );

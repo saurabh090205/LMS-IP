@@ -1,6 +1,6 @@
-# SHREENIL.COM — STUDENT MVP MASTER IMPLEMENTATION
+﻿# SHREENIL.COM â€” STUDENT MVP MASTER IMPLEMENTATION
 
-> **“Every Student. One Digital Twin. One Lifetime Learning Journey.”**
+> **â€œEvery Student. One Digital Twin. One Lifetime Learning Journey.â€**
 
 ---
 
@@ -20,44 +20,44 @@ Shreenil is an AI-first Virtual University and holistic learning ecosystem. This
 
 ```
 shreenil/
-├── backend/                        # Spring Boot 3.3.4 Application
-│   ├── src/main/java/com/shreenil/
-│   │   ├── config/                 # Security, CORS, OpenAPI Swagger
-│   │   ├── common/                 # GlobalExceptionHandler, ApiResponse, ErrorCode, BaseEntity
-│   │   ├── auth/                   # Keycloak JWT Converter, UserPrincipal, SecurityUtils
-│   │   ├── user/                   # User profile, role-aware navigation
-│   │   ├── academic/               # VIT Syllabus: Institution, Program, Course, Unit, Topic, Practical, CO
-│   │   ├── profile/                # StudentProfile, Skills, Interests, Digital Twin Lite, Dashboard
-│   │   ├── classroom/              # LiveClasses (Jitsi), RecordedLectures, TimetableSlots
-│   │   ├── homework/               # Assignments, Submissions
-│   │   ├── attendance/             # AttendanceRecords, Compliance summaries
-│   │   ├── exams/                  # GradeRecords, Semester evaluations, Official Report Card
-│   │   ├── library/                # Digital library catalog & search
-│   │   ├── ai/                     # Syllabus-aware AI Learning Mentor service boundary
-│   │   └── health/                 # Health check endpoint
-│   ├── src/main/resources/
-│   │   ├── db/migration/           # Flyway migrations V1__core_auth to V9__seed_demo_student
-│   │   └── application.yml         # Spring configuration profiles (dev, test, prod)
-│   └── pom.xml                     # Maven dependencies & build configuration
-├── frontend/                       # React 19 + TypeScript + Vite Frontend
-│   ├── src/
-│   │   ├── components/ui/          # Premium design system (Buttons, Cards, Badges, Tables, Inputs)
-│   │   ├── components/layout/      # DashboardLayout, Sidebar, Topbar, Search, CourseLayout
-│   │   ├── services/api/           # Typed API modules (studentApi, academicApi, homeworkApi, etc.)
-│   │   ├── pages/
-│   │   │   ├── dashboards/         # StudentDashboard (Digital Twin Lite)
-│   │   │   ├── student/            # Academics, Courses, Timetable, Homework, Attendance, Report Card, Classroom, Library, AI Mentor
-│   │   │   └── common/             # Profile, Settings, ComingSoon modules (Sports, Spiritual, Innovation, Career, XR)
-│   │   └── routes/AppRoutes.tsx    # Role-based & student navigation routes
-│   └── package.json
-├── infra/                          # Docker & Local Infrastructure
-│   ├── docker-compose.yml          # PostgreSQL, Keycloak, Backend services
-│   ├── Dockerfile                  # Multi-stage production container build
-│   └── keycloak/
-│       └── shreenil-realm.json     # Keycloak realm with ROLE_STUDENT and demo student
-├── docs/                           # Architecture, API specifications & syllabus source
-├── .env.example                    # Environment configuration template
-└── README.md                       # Master engineering documentation
+â”œâ”€â”€ backend/                        # Spring Boot 3.3.4 Application
+â”‚   â”œâ”€â”€ src/main/java/com/shreenil/
+â”‚   â”‚   â”œâ”€â”€ config/                 # Security, CORS, OpenAPI Swagger
+â”‚   â”‚   â”œâ”€â”€ common/                 # GlobalExceptionHandler, ApiResponse, ErrorCode, BaseEntity
+â”‚   â”‚   â”œâ”€â”€ auth/                   # Keycloak JWT Converter, UserPrincipal, SecurityUtils
+â”‚   â”‚   â”œâ”€â”€ user/                   # User profile, role-aware navigation
+â”‚   â”‚   â”œâ”€â”€ academic/               # VIT Syllabus: Institution, Program, Course, Unit, Topic, Practical, CO
+â”‚   â”‚   â”œâ”€â”€ profile/                # StudentProfile, Skills, Interests, Digital Twin Lite, Dashboard
+â”‚   â”‚   â”œâ”€â”€ classroom/              # LiveClasses (Jitsi), RecordedLectures, TimetableSlots
+â”‚   â”‚   â”œâ”€â”€ homework/               # Assignments, Submissions
+â”‚   â”‚   â”œâ”€â”€ attendance/             # AttendanceRecords, Compliance summaries
+â”‚   â”‚   â”œâ”€â”€ exams/                  # GradeRecords, Semester evaluations, Official Report Card
+â”‚   â”‚   â”œâ”€â”€ library/                # Digital library catalog & search
+â”‚   â”‚   â”œâ”€â”€ ai/                     # Syllabus-aware AI Learning Mentor service boundary
+â”‚   â”‚   â””â”€â”€ health/                 # Health check endpoint
+â”‚   â”œâ”€â”€ src/main/resources/
+â”‚   â”‚   â”œâ”€â”€ db/migration/           # Flyway migrations V1__core_auth to V9__seed_demo_student
+â”‚   â”‚   â””â”€â”€ application.yml         # Spring configuration profiles (dev, test, prod)
+â”‚   â””â”€â”€ pom.xml                     # Maven dependencies & build configuration
+â”œâ”€â”€ frontend/                       # React 19 + TypeScript + Vite Frontend
+â”‚   â”œâ”€â”€ src/
+â”‚   â”‚   â”œâ”€â”€ components/ui/          # Premium design system (Buttons, Cards, Badges, Tables, Inputs)
+â”‚   â”‚   â”œâ”€â”€ components/layout/      # DashboardLayout, Sidebar, Topbar, Search, CourseLayout
+â”‚   â”‚   â”œâ”€â”€ services/api/           # Typed API modules (studentApi, academicApi, homeworkApi, etc.)
+â”‚   â”‚   â”œâ”€â”€ pages/
+â”‚   â”‚   â”‚   â”œâ”€â”€ dashboards/         # StudentDashboard (Digital Twin Lite)
+â”‚   â”‚   â”‚   â”œâ”€â”€ student/            # Academics, Courses, Timetable, Homework, Attendance, Report Card, Classroom, Library, AI Mentor
+â”‚   â”‚   â”‚   â””â”€â”€ common/             # Profile, Settings, ComingSoon modules (Sports, Spiritual, Innovation, Career, XR)
+â”‚   â”‚   â””â”€â”€ routes/AppRoutes.tsx    # Role-based & student navigation routes
+â”‚   â””â”€â”€ package.json
+â”œâ”€â”€ infra/                          # Docker & Local Infrastructure
+â”‚   â”œâ”€â”€ docker-compose.yml          # PostgreSQL, Keycloak, Backend services
+â”‚   â”œâ”€â”€ Dockerfile                  # Multi-stage production container build
+â”‚   â””â”€â”€ keycloak/
+â”‚       â””â”€â”€ shreenil-realm.json     # Keycloak realm with ROLE_STUDENT and demo student
+â”œâ”€â”€ docs/                           # Architecture, API specifications & syllabus source
+â”œâ”€â”€ .env.example                    # Environment configuration template
+â””â”€â”€ README.md                       # Master engineering documentation
 ```
 
 ---
@@ -70,12 +70,12 @@ The academic curriculum is modeled hierarchically and seeded from **VIT B.Tech C
 - **Program**: B.Tech Computer Science & Engineering (Artificial Intelligence)
 - **Academic Year**: AY 2026-27 (Year 3 / Semester V / Module V)
 - **Courses**:
-  - `CI3001` — Deep Learning (4.0 Credits, 3 Theory + 2 Lab, Units I-VI, Practicals 1-12, CO1-CO6)
-  - `CI3202` — Operating System (4.0 Credits)
-  - `CI3003D` — MLOPS (4.0 Credits)
-  - `CI3203B` — Distributed and Federated Learning (4.0 Credits)
-  - `CI3203A` — Ethical and Responsible AI (4.0 Credits)
-  - `CI3203C` — Information Security (4.0 Credits)
+  - `CI3001` â€” Deep Learning (4.0 Credits, 3 Theory + 2 Lab, Units I-VI, Practicals 1-12, CO1-CO6)
+  - `CI3202` â€” Operating System (4.0 Credits)
+  - `CI3003D` â€” MLOPS (4.0 Credits)
+  - `CI3203B` â€” Distributed and Federated Learning (4.0 Credits)
+  - `CI3203A` â€” Ethical and Responsible AI (4.0 Credits)
+  - `CI3203C` â€” Information Security (4.0 Credits)
 
 ### Real vs. Mock Separation
 - **Real Academic Data**: Institution, Program, Course codes, Credits, Theory/Lab hours, Prerequisites, Objectives, Relevance, Units, Topics, Practicals, Course Outcomes, Assessment Scheme, Textbooks.
@@ -115,27 +115,39 @@ The academic curriculum is modeled hierarchically and seeded from **VIT B.Tech C
 - Node.js 20+ & npm (`npm -v`)
 - Docker & Docker Compose (Optional for full containerized stack)
 
-### Step 1: Start Infrastructure (PostgreSQL & Keycloak)
+### Option A: Run Full Stack via Docker (Recommended)
 ```bash
-cd infra
-docker-compose up -d postgres keycloak
+docker compose up -d --build
+```
+- **Student Portal (Frontend)**: `http://localhost:5173`
+- **REST API Backend**: `http://localhost:8081`
+- **Swagger API Docs**: `http://localhost:8081/docs` (or `/swagger-ui.html`)
+- **Keycloak IAM**: `http://localhost:8080` (admin / admin)
+- **PostgreSQL Database**: `localhost:5432` (`shreenildb` / `shreenil`)
+
+### Option B: Local Hybrid Development (Infra in Docker + Local Dev)
+
+#### Step 1: Start Infrastructure (PostgreSQL & Keycloak)
+```bash
+docker compose up -d postgres keycloak
 ```
 
-### Step 2: Start Spring Boot Backend
+#### Step 2: Start Spring Boot Backend
 ```bash
 cd backend
 mvn spring-boot:run
 ```
-- Swagger API Docs: `http://localhost:8081/swagger-ui.html`
+- Swagger API Docs: `http://localhost:8081/docs`
 - Health Endpoint: `http://localhost:8081/api/v1/health`
 
-### Step 3: Start React Frontend
+#### Step 3: Start React Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 - Student Portal: `http://localhost:5180` (or configured port)
+- Student Portal: `http://localhost:5173`
 
 ---
 

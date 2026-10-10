@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+﻿import React from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import {
   LucideIcon,
@@ -7,14 +7,14 @@ import {
   ChevronRight,
   X,
   GraduationCap,
-  ShieldCheck,
-  User,
+  LogOut,
   Sparkles,
+  Smartphone,
+  ArrowRight,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { roleNavigationConfig } from '../../features/role-navigation/navigationConfig';
-import { Badge } from '../ui/Badge';
-import { Avatar } from '../ui/Avatar';
 import { cn } from '../../lib/utils';
 import { NavItem } from '../../types/navigation';
 
@@ -31,12 +31,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isCollapsed,
   onToggleCollapse,
 }) => {
-  const { user, role } = useAuth();
+  const { role, logout, user } = useAuth();
+  const { addToast } = useToast();
   const location = useLocation();
+  const navigate = useNavigate();
   const sections = roleNavigationConfig[role] || [];
 
   const getIcon = (iconName: string): LucideIcon => {
-    return (Icons as unknown as Record<string, LucideIcon>)[iconName] || Icons.HelpCircle;
+    return (Icons as unknown as Record<string, LucideIcon>)[iconName] || Icons.Circle;
+  };
+
+  const handleLogout = () => {
+    logout();
+    addToast({
+      title: 'Signed Out',
+      description: 'You have been safely logged out of your session.',
+      type: 'info',
+    });
+    navigate('/login');
   };
 
   const renderNavItem = (item: NavItem) => {
@@ -52,136 +64,150 @@ export const Sidebar: React.FC<SidebarProps> = ({
           cn(
             'group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 select-none tracking-tight',
             linkActive || isActive
-              ? 'bg-[#EEF0FF] text-[#4F46E5] font-semibold'
-              : 'text-slate-600 hover:bg-[#F6F6FB] hover:text-slate-900',
+              ? 'bg-[#EFF9F3] text-[#18794E] font-bold shadow-xs'
+              : 'text-[#6B756F] hover:bg-slate-50 hover:text-[#18221D]',
             isCollapsed && 'justify-center px-2'
           )
         }
         title={isCollapsed ? item.title : undefined}
       >
-        {/* Active subtle indicator bar */}
+        {/* Active green indicator strip */}
         {(location.pathname === item.href) && (
-          <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#4F46E5]" />
+          <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-[#36B875]" />
         )}
         <Icon
           className={cn(
             'w-4 h-4 shrink-0 transition-colors',
-            isActive ? 'text-[#4F46E5] stroke-[2.2]' : 'text-slate-400 group-hover:text-slate-600'
+            isActive ? 'text-[#36B875] stroke-[2.2]' : 'text-slate-400 group-hover:text-slate-600'
           )}
         />
         {!isCollapsed && (
-          <span className="flex-1 truncate">{item.title}</span>
+          <span className="truncate flex-1">{item.title}</span>
         )}
-
         {!isCollapsed && item.badge !== undefined && (
-          <Badge
-            variant={item.badgeVariant || 'neutral'}
-            size="sm"
-            className="ml-auto shrink-0 font-semibold text-[10px]"
+          <span
+            className={cn(
+              'px-1.5 py-0.5 rounded-full text-[10px] font-bold shrink-0',
+              item.badgeVariant === 'warning'
+                ? 'bg-amber-100 text-amber-800'
+                : item.badgeVariant === 'danger'
+                ? 'bg-rose-100 text-rose-800'
+                : 'bg-[#EFF9F3] text-[#18794E]'
+            )}
           >
             {item.badge}
-          </Badge>
+          </span>
         )}
       </NavLink>
     );
   };
 
-  const sidebarContent = (
-    <div className="flex h-full flex-col justify-between overflow-y-auto px-3.5 py-4">
-      {/* Navigation Sections */}
-      <div className="flex flex-col gap-6">
-        {sections.map((section, idx) => (
-          <div key={idx} className="flex flex-col gap-0.5">
-            {!isCollapsed && section.title && (
-              <h3 className="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5 select-none">
-                {section.title}
-              </h3>
-            )}
-            <div className="flex flex-col gap-0.5">
-              {section.items.map(renderNavItem)}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Bottom Footer Section: User Profile Snapshot & Collapse Button */}
-      <div className="flex flex-col gap-2.5 pt-3 border-t border-[#E7E7F0]">
-        {!isCollapsed && (
-          <div className="flex items-center gap-3 p-2.5 rounded-xl bg-[#F6F6FB] border border-[#E7E7F0]">
-            <Avatar name={user.name} size="sm" status="online" />
-            <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-xs font-semibold text-slate-800 truncate leading-tight">{user.name}</span>
-              <span className="text-[10px] text-slate-500 capitalize truncate mt-0.5">
-                {user.role} Portal
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Collapse Button */}
-        <div className="hidden lg:flex items-center justify-end">
-          <button
-            type="button"
-            onClick={onToggleCollapse}
-            className="flex items-center gap-2 p-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-[#F6F6FB] rounded-lg w-full justify-center transition-colors select-none"
-            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {isCollapsed ? (
-              <ChevronRight className="w-4 h-4" />
-            ) : (
-              <>
-                <ChevronLeft className="w-4 h-4" />
-                <span>Collapse Sidebar</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <>
-      {/* Desktop & Tablet Persistent / Collapsible Sidebar */}
+      {/* Mobile Backdrop */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs lg:hidden transition-opacity"
+          onClick={onCloseMobile}
+        />
+      )}
+
+      {/* Main Sidebar Container */}
       <aside
         className={cn(
-          'hidden lg:flex flex-col border-r border-[#E7E7F0] bg-white transition-all duration-200 shrink-0 sticky top-16 h-[calc(100vh-4rem)]',
-          isCollapsed ? 'w-20' : 'w-64'
+          'fixed inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-[#E5EBE7] transition-all duration-200 ease-in-out lg:static shadow-subtle',
+          isCollapsed ? 'w-18' : 'w-64',
+          isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
-        {sidebarContent}
-      </aside>
-
-      {/* Mobile Drawer (Slide-Over) */}
-      {isMobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity animate-in fade-in"
-            onClick={onCloseMobile}
-          />
-
-          {/* Drawer Sheet */}
-          <div className="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-10 flex flex-col animate-in slide-in-from-left duration-200">
-            <div className="flex items-center justify-between p-4 border-b border-slate-200">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold text-sm shadow-2xs">
-                  <GraduationCap className="w-4 h-4" />
-                </div>
-                <span className="font-bold text-slate-900 text-sm">Shreenil Navigation</span>
-              </div>
-              <button
-                onClick={onCloseMobile}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
-              >
-                <X className="w-5 h-5" />
-              </button>
+        {/* Top Logo & Brand (Matching Reference 1 green pill badge) */}
+        <div className="h-16 flex items-center justify-between px-4 border-b border-[#E5EBE7]">
+          <div className="flex items-center gap-2.5 overflow-hidden">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#36B875] text-white shadow-mint">
+              <GraduationCap className="h-5 w-5 stroke-[2.2]" />
             </div>
+            {!isCollapsed && (
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-[#18221D] tracking-tight uppercase">
+                  COURSE LMS
+                </span>
+                <span className="text-[10px] font-semibold text-[#36B875] tracking-wider uppercase">
+                  Shreenil Platform
+                </span>
+              </div>
+            )}
+          </div>
 
-            <div className="flex-1 overflow-y-auto">{sidebarContent}</div>
+          <div className="flex items-center gap-1">
+            {/* Desktop Collapse Toggle */}
+            <button
+              onClick={onToggleCollapse}
+              className="hidden lg:flex p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
+              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </button>
+            {/* Mobile Close Button */}
+            <button
+              onClick={onCloseMobile}
+              className="lg:hidden p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
         </div>
-      )}
+
+        {/* Scrollable Navigation Sections */}
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5 no-scrollbar">
+          {sections.map((section, idx) => (
+            <div key={idx} className="space-y-1">
+              {!isCollapsed && (
+                <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-[#6B756F]/80 mb-1">
+                  {section.title}
+                </div>
+              )}
+              <div className="space-y-0.5">
+                {section.items.map(renderNavItem)}
+              </div>
+            </div>
+          ))}
+
+          {/* Reference 1 bottom-left Promo Mini Card: "Start Learning" */}
+          {!isCollapsed && role === 'student' && (
+            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[#EFF9F3] to-[#D6F2E3] border border-[#B0E7CB] text-center my-3 relative overflow-hidden">
+              <div className="w-10 h-10 rounded-full bg-white/80 shadow-xs flex items-center justify-center mx-auto mb-2 text-[#36B875]">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <h4 className="text-xs font-bold text-[#18794E]">Continue Learning</h4>
+              <p className="text-[10px] text-[#18794E]/80 mt-0.5 mb-2.5">
+                Practical 2 (MLP) due in 3 days. Keep your streak alive!
+              </p>
+              <button
+                onClick={() => navigate('/student/assignments')}
+                className="w-full py-1.5 px-3 rounded-xl bg-[#36B875] hover:bg-[#239B5E] text-white text-[11px] font-bold shadow-xs transition-colors flex items-center justify-center gap-1.5"
+              >
+                <span>Start Learning</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom User & Logout Footer */}
+        <div className="p-3 border-t border-[#E5EBE7] bg-white">
+          <button
+            onClick={handleLogout}
+            className={cn(
+              'w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer',
+              isCollapsed && 'justify-center px-2'
+            )}
+            title="Log Out"
+          >
+            <LogOut className="w-4 h-4 shrink-0 text-rose-500" />
+            {!isCollapsed && <span>Logout</span>}
+          </button>
+        </div>
+      </aside>
     </>
   );
 };

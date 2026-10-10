@@ -1,12 +1,12 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    color: #1F2937;
-    background-color: #F6F6FB;
+    color: #18221D;
+    background-color: #F6F8F7;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -16,12 +16,12 @@
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
-    background-color: #F6F6FB;
-    color: #1F2937;
+    background-color: #F6F8F7;
+    color: #18221D;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: #111827;
+    color: #18221D;
     letter-spacing: -0.015em;
   }
 }
@@ -29,36 +29,31 @@
 /* Crisp academic surface elevation */
 .shreenil-card {
   background-color: #FFFFFF;
-  border: 1px solid #E7E7F0;
-  border-radius: 0.875rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+  border: 1px solid #E5EBE7;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px -2px rgba(24, 34, 29, 0.04), 0 1px 3px 0 rgba(24, 34, 29, 0.02);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .shreenil-card:hover {
-  border-color: #D8D8E5;
-  box-shadow: 0 4px 16px 0 rgba(31, 41, 55, 0.04);
+  border-color: #B0E7CB;
+  box-shadow: 0 8px 20px -4px rgba(24, 34, 29, 0.06);
 }
 
-/* Refined academic reading container */
-.reading-content {
-  font-family: 'Lora', 'Merriweather', Georgia, serif;
-  line-height: 1.75;
-  color: #2D3748;
+/* Chalkboard pattern for login reference */
+.chalkboard-bg {
+  background-color: #1C332A;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
 }
 
-.reading-content h1,
-.reading-content h2,
-.reading-content h3 {
-  font-family: 'Inter', system-ui, sans-serif;
-  letter-spacing: -0.02em;
-  color: #111827;
-}
-
-/* Custom scrollbars for clean academic UI */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -66,15 +61,14 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D8D8E5;
+  background: #D1DDD6;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #A0A0B8;
+  background: #A3B8AD;
 }
 
-/* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
